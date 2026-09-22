@@ -221,3 +221,123 @@ button, input, textarea, select { font: inherit; }
   max-height: 220px;
   overflow: auto;
 }
+
+
+/* --- Guided UI: InfoTip, GuidedFooter, progress, banner, drag --- */
+.info-tip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+.info-tip__btn {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-light);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.info-tip__btn:hover,
+.info-tip__btn:focus-visible {
+  border-color: var(--blue);
+  color: var(--text-bright);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-light);
+}
+.info-tip__popover {
+  position: absolute;
+  z-index: 40;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 180px;
+  max-width: 280px;
+  padding: 0.55rem 0.7rem;
+  border-radius: var(--radius-btn);
+  border: 1px solid var(--border-light);
+  background: var(--panel);
+  color: var(--text-primary);
+  font-size: 12px;
+  line-height: 1.4;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  white-space: normal;
+}
+
+.guided-footer {
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+  display: grid;
+  gap: 0.75rem;
+}
+.guided-footer__tip {
+  margin: 0;
+}
+.guided-footer__block {
+  margin: 0;
+  color: #ef4444;
+  font-size: 13px;
+  font-weight: 500;
+}
+.guided-footer__nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.guided-footer__next-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.guided-footer button:disabled,
+.guided-footer .btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.progress-track {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  width: 100%;
+}
+.progress-track__seg {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--border);
+  transition: background 0.2s ease;
+}
+.progress-track__seg[data-done="true"] {
+  background: color-mix(in srgb, var(--blue) 70%, transparent);
+}
+.progress-track__seg[data-active="true"] {
+  background: var(--blue);
+}
+
+.guide-banner {
+  padding: 0.65rem 0.9rem;
+  border-radius: var(--radius-btn);
+  border: 1px solid var(--border-light);
+  background: var(--accent-light);
+  color: var(--text-bright);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.drag-over {
+  border-color: var(--blue) !important;
+  box-shadow: inset 0 0 0 1px var(--blue);
+  background: var(--accent-light);
+}
