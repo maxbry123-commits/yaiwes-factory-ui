@@ -217,6 +217,54 @@ export const PLUGIN_CATALOG = [
   },
 ] as const;
 
+
+export const LS_BACKEND = "FROMTED_factory_backend";
+export const EVENT_BACKEND_CHANGED = "fromted:backend-changed";
+
+export const BACKEND_FEATURES = [
+  { id: "auth-session", label: "Auth / sesión", info: "Login y sesión de usuario para la app generada." },
+  { id: "file-storage", label: "Almacenamiento de archivos", info: "Subida y guardado de docs/fotos/videos del paso 1." },
+  { id: "rest-api", label: "API REST", info: "Endpoints CRUD derivados de ventanas y componentes." },
+  { id: "webhooks", label: "Webhooks", info: "Hooks de entrada/salida para integraciones." },
+  { id: "db-schema", label: "Schema DB", info: "Tablas/colecciones según segmentos del paso 2." },
+  { id: "download-motor-hook", label: "Hook motor descarga", info: "Conecta con el motor de descarga OSS (REUSE>GENERATE)." },
+  { id: "skills-to-schema", label: "Skills → schema", info: "Convierte skills cargados en schema usable." },
+  { id: "deploy-hooks", label: "Deploy hooks", info: "Prepara hooks de despliegue Vercel (sin HF)." },
+] as const;
+
+export type BackendFeatureId = (typeof BACKEND_FEATURES)[number]["id"];
+
+export function getFactoryBackend(): string[] {
+  if (!isBrowser()) return [];
+  const parsed = safeParse<string[] | { features?: string[] } | null>(
+    localStorage.getItem(LS_BACKEND),
+    [],
+  );
+  if (Array.isArray(parsed)) return parsed.filter((x) => typeof x === "string");
+  if (parsed && typeof parsed === "object" && Array.isArray(parsed.features)) {
+    return parsed.features.filter((x) => typeof x === "string");
+  }
+  return [];
+}
+
+export function setFactoryBackend(ids: string[]): void {
+  if (!isBrowser()) return;
+  const unique = Array.from(new Set(ids));
+  localStorage.setItem(LS_BACKEND, JSON.stringify(unique));
+  window.dispatchEvent(
+    new CustomEvent(EVENT_BACKEND_CHANGED, { detail: unique }),
+  );
+}
+
+export function toggleFactoryBackend(id: string): string[] {
+  const current = getFactoryBackend();
+  const next = current.includes(id)
+    ? current.filter((x) => x !== id)
+    : [...current, id];
+  setFactoryBackend(next);
+  return next;
+}
+
 export {
   FactoryProvider,
   useFactory,
