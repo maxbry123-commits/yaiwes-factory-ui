@@ -1,0 +1,5 @@
+{
+	"editor.insertSpaces": false,
+	"js/ts.tsc.autoDetect": "off",
+	"typescript.preferences.quoteStyle": "single"
+}

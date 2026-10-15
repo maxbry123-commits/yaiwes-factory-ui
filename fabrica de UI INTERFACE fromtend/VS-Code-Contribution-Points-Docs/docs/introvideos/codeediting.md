@@ -1,0 +1,57 @@
+---
+ContentId: 826efeef-6803-49bd-a500-06c6c42cda19
+DateApproved: 11/16/2021
+MetaDescription: Learn the basics of editing and running code in {% data variables.product.prodname_vscode_shortname %}.
+MetaSocialImage:
+---
+# Code editing in {% data variables.product.prodname_vscode %}
+
+In this {% data variables.product.prodname_vscode %} tutorial, we cover how to edit and run a small piece of code, including the features outlined below. After viewing this overview, read on in the [Related Resources](/docs/introvideos/codeediting.md#related-resources) section to see more features.
+
+[![Watch Code editing in {% data variables.product.prodname_vscode %} on YouTube (opens in new tab).](images/codeediting/youtube-MNBwGGwvvKE.jpg)](https://www.youtube.com/watch?v=MNBwGGwvvKE)
+
+Here's the next video we recommend: [Productivity Tips](/docs/introvideos/productivity.md)
+
+Pick another video from the list: [Introductory Videos](/docs/getstarted/introvideos.md)
+
+## Video outline
+
+* Open a folder.
+  * **File** > **Open Folder** (`kb(workbench.action.files.openFolder)`)
+* Use File Explorer to view the folder's files and subfolders.
+  * **View** > **Explorer** (`kb(workbench.view.explorer)`)
+* Install the Node.js runtime to execute JavaScript code.
+  * Find Node.js for your platform at [https://nodejs.org](https://nodejs.org)
+* Check your Node.js installation.
+  * From a terminal or command prompt, type `node --version`
+* Create new file.
+  * **File** > **New File** (`kb(workbench.action.files.newUntitledFile)`)
+* Create a simple "Hello world" console application called `app.js`.
+* IntelliSense provides suggestions as you type.
+* Automatically format the source code.
+  * **Format Document** command (`kb(editor.action.formatDocument)`)
+* Turn on Auto Save.
+  * **File** > **Auto Save**
+* Display the Integrated Terminal.
+  * **View** > **Terminal** (`kb(workbench.action.terminal.toggleTerminal)`)
+* Split the terminal.
+  * **Split Terminal** (`kb(workbench.action.terminal.split)`)
+* Create new terminal.
+  * **Create New Terminal** (`kb(workbench.action.terminal.new)`)
+* Run the application.
+  * From the Integrated Terminal, type `node app.js`
+
+## Next video
+
+* [Productivity Tips](/docs/introvideos/productivity.md) -Become a {% data variables.product.prodname_vscode_shortname %} power user with these productivity tips.
+* [Introductory Videos](/docs/getstarted/introvideos.md) - Review the entire list of videos.
+
+## Related resources
+
+* [Basic Editing](/docs/editing/codebasics.md) - Learn about the powerful {% data variables.product.prodname_vscode_shortname %} editor.
+* [Code Navigation](/docs/editing/editingevolved.md) - Move quickly through your source code.
+* [Emmet Snippets](/docs/languages/html.md#emmet-snippets) - Use Emmet Snippets.
+* [Tasks](/docs/debugtest/tasks.md) - Create tasks to use external tools inside {% data variables.product.prodname_vscode_shortname %}.
+* [JavaScript Linters](/docs/languages/javascript.md#linters) - Install linters for JavaScript.
+* [Code Folding](/docs/editing/codebasics.md#folding) - See the details of source code folding.
+* [Tips and Tricks](/docs/editing/getting-started/tips-and-tricks.md) - Helpful tips and tricks for {% data variables.product.prodname_vscode_shortname %}.

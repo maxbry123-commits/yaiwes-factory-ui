@@ -1,0 +1,116 @@
+---
+ContentId: f8e4b2c1-9d3a-4e5f-b6c7-8a9d0e1f2b3c
+DateApproved: 9/2/2026
+MetaDescription: Troubleshoot GitHub Copilot issues in {% data variables.product.prodname_vscode %} with logs, diagnostics, and debugging tools.
+MetaSocialImage: ../images/shared/github-copilot-social.png
+Keywords:
+- ai
+- copilot
+- troubleshooting
+- diagnostics
+- logs
+- debugging
+---
+# Troubleshoot AI in {% data variables.product.prodname_vscode %}
+
+This article covers diagnostic tools and techniques for troubleshooting AI-related issues in {% data variables.product.prodname_vscode_shortname %}. Use these tools to identify problems with network connectivity, customization files, and AI responses.
+
+## View logs for GitHub Copilot
+
+The log files for the GitHub Copilot extension are stored in the standard log location for {% data variables.product.prodname_vscode %} extensions. Use these logs to diagnose connection issues, extension errors, and unexpected behavior.
+
+To view detailed logs:
+
+1. Open the Command Palette (`kb(workbench.action.showCommands)`).
+1. Run **Developer: Set Log Level** and set the value to **Trace** for the GitHub Copilot and {% data variables.copilot.copilot_chat %} extensions.
+1. Run **Output: Show Output Channels** and select either **GitHub Copilot** or **{% data variables.copilot.copilot_chat %}** from the list.
+1. In the Output panel, view the logs for the selected extension.
+
+To switch between output channels, select **GitHub Copilot** or **{% data variables.copilot.copilot_chat %}** from the dropdown menu on the right side of the Output panel.
+
+## Collect network diagnostics
+
+If you encounter problems connecting to GitHub Copilot, collect network connectivity diagnostics to identify firewall, proxy, or VPN issues.
+
+1. Open the Command Palette (`kb(workbench.action.showCommands)`).
+1. Run **GitHub Copilot: Collect Diagnostics**.
+1. An editor tab opens with diagnostic information you can review and share when reporting issues.
+
+For more information about network configuration, see [Network and firewall configuration for Copilot](/docs/agents/agent-troubleshooting/faq.md#network-and-firewall-configuration-for-copilot).
+
+## Debug chat interactions
+
+{% data variables.product.prodname_vscode_shortname %} provides different tools to inspect what happens when you send a prompt to the AI.
+
+* **`/troubleshoot` slash command:**
+
+    Ask the AI to analyze debug logs for extension host chat sessions and Agent Host sessions. Use it to understand agent behavior, such as why custom instructions were ignored or why responses are slow. Type `/troubleshoot` followed by your question, such as `/troubleshoot how many tokens did I use?` or `/troubleshoot list all paths you tried to load customizations in #session`.
+
+    For extension host chat sessions, enable `setting(github.copilot.chat.agentDebugLog.fileLogging.enabled)` and reload the window before you use `/troubleshoot`. For Agent Host sessions, enable `setting(chat.agentHost.agentDebugLog.enabled)` before you start the session that you want to capture.
+
+    To diagnose an agent host session:
+
+    1. Open the {% data variables.copilot.agents_window %}.
+    1. In the chat input, type `/troubleshoot #session`.
+    1. Select the local or remote session that you want to troubleshoot.
+    1. Add a question or description of the issue, and then send the request.
+
+* **Agent Debug Log panel (Preview):**
+
+    Shows a chronological event log of agent interactions during a chat session, including tool call sequences, LLM requests, token usage, prompt file discovery, and errors. This is the primary tool for understanding and debugging chat interactions.
+
+    To open the Agent Debug Log panel:
+
+    1. Select the ellipsis (**...**) menu in the {% data variables.copilot.chat_view %} and select **Show Agent Debug Logs**.
+
+    From the Agent Debug Log panel, you can attach a snapshot of the agent debug events to a chat conversation to ask the AI questions about the session and troubleshoot a specific interaction.
+
+    Learn more about the [Agent Debug Log panel](/docs/agents/agent-troubleshooting/chat-debug-view.md#agent-debug-log-panel).
+
+* **Cache Explorer:**
+
+    Compares consecutive model requests to show where the prompt cache breaks. Use it when responses are slow or a session consumes more tokens than expected to check whether a low cache hit rate is the cause.
+
+    Learn more about the [Cache Explorer](/docs/agents/agent-troubleshooting/cache-explorer.md).
+
+* **Chat Debug view:**
+
+    Shows the raw details of each LLM request and response, including the full system prompt, user prompt, context, and tool invocation payloads. Use this view to inspect the exact data sent to and received from the language model for each interaction.
+
+    To open the Chat Debug view:
+
+    1. Select the overflow menu (`...`) in the {% data variables.copilot.chat_view %}.
+    1. Select **Show Chat Debug View**.
+
+Learn more about the [Chat Debug view](/docs/agents/agent-troubleshooting/chat-debug-view.md#chat-debug-view).
+
+## Troubleshoot MCP servers
+
+MCP servers extend chat capabilities by connecting to external services. If an MCP server isn't working correctly, you can view its logs and restart it.
+
+To troubleshoot MCP servers:
+
+1. Open the Command Palette and run **MCP: List Servers**.
+1. Select a server to view its status and available actions.
+1. Select **Show Output** to view the server's logs.
+1. Select **Restart Server** to restart a misbehaving server.
+
+Learn more about [configuring and debugging MCP servers](/docs/agent-customization/mcp-servers.md).
+
+## Provide feedback
+
+If you encounter issues that you can't resolve, report them to help improve GitHub Copilot:
+
+* **Ghost text suggestions**: Hover over a ghost text suggestion in the editor and select **Send Copilot Completion Feedback**.
+* **{% data variables.copilot.next_edit_suggestions_caps %}**: Select the **Feedback** action in the {% data variables.copilot.next edit suggestions %} menu in the editor gutter.
+* **General issues**: Open **Help** > **Report Issue**, select **{% data variables.product.prodname_vscode_shortname %} Extension**, and choose **{% data variables.copilot.copilot_chat %}**.
+
+When reporting issues, include relevant information from the [Copilot logs](#view-logs-for-github-copilot) to help diagnose the problem.
+
+## Related resources
+
+* [Debug chat interactions](/docs/agents/agent-troubleshooting/chat-debug-view.md)
+* [Diagnose prompt caching with the Cache Explorer](/docs/agents/agent-troubleshooting/cache-explorer.md)
+* [Custom instructions](/docs/agent-customization/custom-instructions.md)
+* [MCP servers](/docs/agent-customization/mcp-servers.md)
+* [GitHub Copilot FAQ](/docs/agents/agent-troubleshooting/faq.md)
