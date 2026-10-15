@@ -1,0 +1,5 @@
+https://github.com/prevwong/craft.js/blob/2d7561f073ae29f8978a47ebacafef223ebf7494/LICENSE
+https://github.com/prevwong/craft.js/blob/2d7561f073ae29f8978a47ebacafef223ebf7494/experimental/slate/LICENSE
+https://github.com/prevwong/craft.js/blob/2d7561f073ae29f8978a47ebacafef223ebf7494/packages/core/LICENSE
+https://github.com/prevwong/craft.js/blob/2d7561f073ae29f8978a47ebacafef223ebf7494/packages/layers/LICENSE
+https://github.com/prevwong/craft.js/blob/2d7561f073ae29f8978a47ebacafef223ebf7494/packages/utils/LICENSE

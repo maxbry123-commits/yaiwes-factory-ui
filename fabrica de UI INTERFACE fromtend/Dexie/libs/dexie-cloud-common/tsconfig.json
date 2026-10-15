@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "lib": ["es2020", "dom"],
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2020",
+    "module": "esnext",
+    "outDir": "dist",
+    "rootDir": "src",
+    "strict": true,
+    "noImplicitAny": false,
+    "declaration": true,
+    "declarationMap": true,
+    "allowSyntheticDefaultImports": true,
+    "composite": true,
+    "skipLibCheck": true,
+    "types": ["jest", "node"]
+  },
+  "include": ["./src"]
+}

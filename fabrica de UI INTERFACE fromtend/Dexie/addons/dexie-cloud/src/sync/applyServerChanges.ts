@@ -1,0 +1,117 @@
+import { DexieCloudDB } from '../db/DexieCloudDB';
+import Dexie from 'dexie';
+import { bulkUpdate } from '../helpers/bulkUpdate';
+import { DBOperationsSet } from 'dexie-cloud-common';
+import { hasBlobRefs } from './blobResolve';
+
+/**
+ * If the incoming value contains BlobRefs (e.g. offloaded strings or binaries),
+ * mark it with _hasBlobRefs = 1 so the blobResolveMiddleware will resolve them
+ * on the next read.
+ */
+function markIfHasBlobRefs(obj: unknown): void {
+  if (
+    obj !== null &&
+    typeof obj === 'object' &&
+    (obj as any).constructor === Object &&
+    hasBlobRefs(obj)
+  ) {
+    (obj as any)._hasBlobRefs = 1;
+  }
+}
+
+export async function applyServerChanges(
+  changes: DBOperationsSet<string>,
+  db: DexieCloudDB
+) {
+  console.debug('Applying server changes', changes, Dexie.currentTransaction);
+  for (const { table: tableName, muts } of changes) {
+    if (!db.dx._allTables[tableName]) {
+      console.debug(
+        `Server sent changes for table ${tableName} that we don't have. Ignoring.`
+      );
+      continue;
+    }
+    const table = db.table(tableName);
+    const { primaryKey } = table.core.schema;
+    const keyDecoder = (key: string) => {
+      switch (key[0]) {
+        case '[':
+          // Decode JSON array
+          if (key.endsWith(']'))
+            try {
+              // On server, array keys are transformed to JSON string representation
+              return JSON.parse(key);
+            } catch {}
+          return key;
+        case '#':
+          // Decode private ID (do the opposite from what's done in encodeIdsForServer())
+          if (key.endsWith(':' + db.cloud.currentUserId)) {
+            return key.substr(
+              0,
+              key.length - db.cloud.currentUserId.length - 1
+            );
+          }
+          return key;
+        default:
+          return key;
+      }
+    };
+    for (const mut of muts) {
+      const keys = mut.keys.map(keyDecoder);
+      switch (mut.type) {
+        case 'insert':
+          mut.values.forEach(markIfHasBlobRefs);
+          if (primaryKey.outbound) {
+            await table.bulkAdd(mut.values, keys);
+          } else {
+            keys.forEach((key, i) => {
+              // Make sure inbound keys are consistent
+              Dexie.setByKeyPath(mut.values[i], primaryKey.keyPath!, key);
+            });
+            await table.bulkAdd(mut.values);
+          }
+          break;
+        case 'upsert':
+          mut.values.forEach(markIfHasBlobRefs);
+          if (primaryKey.outbound) {
+            await table.bulkPut(mut.values, keys);
+          } else {
+            keys.forEach((key, i) => {
+              // Make sure inbound keys are consistent
+              Dexie.setByKeyPath(mut.values[i], primaryKey.keyPath!, key);
+            });
+            await table.bulkPut(mut.values);
+          }
+          break;
+        case 'modify':
+          if (keys.length === 1) {
+            await table.update(keys[0], mut.changeSpec);
+          } else {
+            await table.where(':id').anyOf(keys).modify(mut.changeSpec);
+          }
+          break;
+        case 'update':
+          if (
+            !primaryKey.outbound &&
+            primaryKey.keyPath &&
+            typeof primaryKey.keyPath === 'string'
+          ) {
+            // The primary key should never be part of an updateSpec — it cannot change
+            // and is already communicated via the operation's keys array.
+            // For private singleton IDs (e.g. "#key:userId" on server, "#key" on client),
+            // the encoded server-side key may leak into the changeSpec via getObjectDiff().
+            // Strip it here unconditionally as a defensive measure.
+            for (const changeSpec of mut.changeSpecs) {
+              delete changeSpec[primaryKey.keyPath];
+            }
+          }
+          await bulkUpdate(table, keys, mut.changeSpecs);
+          break;
+        case 'delete':
+          await table.bulkDelete(keys);
+          break;
+      }
+    }
+  }
+}

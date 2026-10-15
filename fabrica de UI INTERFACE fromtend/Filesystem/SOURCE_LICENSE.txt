@@ -1,0 +1,1 @@
+{"commit": "74495f5177e8f3f2aa477058708af69dea0c0a09", "license_files": ["LICENSE"], "source": "https://github.com/ionic-team/capacitor-filesystem"}

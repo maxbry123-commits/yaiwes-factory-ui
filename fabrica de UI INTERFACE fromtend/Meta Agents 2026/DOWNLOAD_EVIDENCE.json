@@ -1,0 +1,20 @@
+[
+  {
+    "repo": "muse-code-sdk",
+    "url": "https://github.com/meta-models/muse-code-sdk",
+    "commit": "fbce769ccb75ab971d00e01a00fe076de4c773fc",
+    "destination": "fabrica de UI INTERFACE fromtend/Meta Agents 2026/muse-code-sdk"
+  },
+  {
+    "repo": "meta-oss-cookbook",
+    "url": "https://github.com/meta-models/meta-oss-cookbook",
+    "commit": "499ad7422c2175cf47dbad5df37c4c8f6c11f924",
+    "destination": "fabrica de UI INTERFACE fromtend/Meta Agents 2026/meta-oss-cookbook"
+  },
+  {
+    "repo": "meta-model-cookbook",
+    "url": "https://github.com/meta-models/meta-model-cookbook",
+    "commit": "fb440d68f9f1eb735faca57092b0729ad6195d96",
+    "destination": "fabrica de UI INTERFACE fromtend/Meta Agents 2026/meta-model-cookbook"
+  }
+]

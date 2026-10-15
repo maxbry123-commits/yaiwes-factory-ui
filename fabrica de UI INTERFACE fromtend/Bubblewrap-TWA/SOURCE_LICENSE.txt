@@ -1,0 +1,1 @@
+{"commit": "a5ffe214c3b03d2d19fbce6d40097a78aa043f66", "license_files": ["LICENSE"], "source": "https://github.com/GoogleChromeLabs/bubblewrap"}

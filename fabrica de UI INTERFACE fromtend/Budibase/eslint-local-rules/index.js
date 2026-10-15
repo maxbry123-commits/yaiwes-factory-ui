@@ -1,0 +1,338 @@
+const path = require("path")
+
+const makeBarrelPath = finalPath => {
+  return path.resolve(__dirname, "..", finalPath)
+}
+const backendCoreBarrelPaths = [
+  makeBarrelPath(path.join("packages", "backend-core", "src", "index.ts")),
+  makeBarrelPath(path.join("packages", "backend-core", "src")),
+  makeBarrelPath(path.join("packages", "backend-core")),
+]
+
+const hasTypeScriptLang = scriptElement => {
+  const attributes = scriptElement.startTag?.attributes || []
+  const langAttribute = attributes.find(
+    attribute =>
+      attribute.type === "SvelteAttribute" && attribute.key?.name === "lang"
+  )
+  const values = langAttribute?.value || []
+
+  return values.some(value => value.value === "ts")
+}
+
+module.exports = {
+  "no-frontend-randomuuid": {
+    meta: {
+      type: "problem",
+      docs: {
+        description:
+          "Disallow crypto.randomUUID() in frontend code and replace it with a frontend-safe UUID helper",
+      },
+      fixable: "code",
+      schema: [],
+      messages: {
+        noFrontendRandomUuid:
+          "Do not use crypto.randomUUID() in frontend code. Use Helpers.uuid() or an approved frontend-safe wrapper instead.",
+      },
+    },
+    create(context) {
+      const filename = context.getFilename()
+      const sourceCode = context.sourceCode
+
+      const findBbuiImport = () =>
+        sourceCode.ast.body.find(
+          node =>
+            node.type === "ImportDeclaration" &&
+            node.source.value === "@budibase/bbui"
+        )
+
+      const hasHelpersImport = () => {
+        const bbuiImport = findBbuiImport()
+        return bbuiImport?.specifiers?.some(
+          specifier =>
+            specifier.type === "ImportSpecifier" &&
+            specifier.imported.name === "Helpers"
+        )
+      }
+
+      const buildFixes = (fixer, node) => {
+        if (filename.endsWith("packages/bbui/src/helpers.ts")) {
+          return [fixer.replaceText(node, "uuid()")]
+        }
+
+        const fixes = [fixer.replaceText(node, "Helpers.uuid()")]
+
+        if (hasHelpersImport()) {
+          return fixes
+        }
+
+        const bbuiImport = findBbuiImport()
+        if (bbuiImport && bbuiImport.specifiers.length > 0) {
+          const closingBrace = sourceCode.getFirstTokenBetween(
+            bbuiImport.specifiers[0],
+            bbuiImport.source,
+            token => token.value === "}"
+          )
+
+          if (closingBrace) {
+            fixes.push(fixer.insertTextBefore(closingBrace, ", Helpers"))
+            return fixes
+          }
+        }
+
+        const [firstNode] = sourceCode.ast.body
+        const importText = 'import { Helpers } from "@budibase/bbui"\n'
+        if (firstNode) {
+          fixes.push(fixer.insertTextBefore(firstNode, importText))
+        } else {
+          fixes.push(fixer.insertTextAfterRange([0, 0], importText))
+        }
+
+        return fixes
+      }
+
+      return {
+        CallExpression(node) {
+          if (
+            node.callee.type === "MemberExpression" &&
+            node.callee.object.type === "Identifier" &&
+            node.callee.object.name === "crypto" &&
+            node.callee.property.type === "Identifier" &&
+            node.callee.property.name === "randomUUID"
+          ) {
+            context.report({
+              node,
+              messageId: "noFrontendRandomUuid",
+              fix: fixer => buildFixes(fixer, node),
+            })
+          }
+        },
+      }
+    },
+  },
+  "no-console-error": {
+    create: function (context) {
+      return {
+        CallExpression(node) {
+          if (
+            node.callee.type === "MemberExpression" &&
+            node.callee.object.name === "console" &&
+            node.callee.property.name === "error" &&
+            node.arguments.length === 1 &&
+            node.arguments[0].name &&
+            node.arguments[0].name.startsWith("err")
+          ) {
+            context.report({
+              node,
+              message:
+                "Using console.error(err) on its own is not allowed. Either provide context to the error (console.error(msg, err)) or throw it.",
+            })
+          }
+        },
+      }
+    },
+  },
+  "no-budibase-imports": {
+    create: function (context) {
+      return {
+        ImportDeclaration(node) {
+          const importPath = node.source.value
+
+          if (
+            /^@budibase\/[^/]+\/.*$/.test(importPath) &&
+            importPath !== "@budibase/backend-core/tests" &&
+            importPath !== "@budibase/string-templates/test/utils"
+          ) {
+            context.report({
+              node,
+              message: `Importing from @budibase is not allowed, except for @budibase/backend-core/tests and @budibase/string-templates/test/utils.`,
+            })
+          }
+        },
+      }
+    },
+  },
+  "no-test-com": {
+    meta: {
+      type: "problem",
+      docs: {
+        description:
+          "disallow the use of 'test.com' in strings and replace it with 'example.com'",
+      },
+      schema: [],
+      fixable: "code",
+    },
+    create: function (context) {
+      return {
+        Literal(node) {
+          if (
+            typeof node.value === "string" &&
+            node.value.includes("test.com")
+          ) {
+            context.report({
+              node,
+              message:
+                "test.com is a privately owned domain and could point anywhere, use example.com instead.",
+              fix: function (fixer) {
+                const newText = node.raw.replace(/test\.com/g, "example.com")
+                return fixer.replaceText(node, newText)
+              },
+            })
+          }
+        },
+      }
+    },
+  },
+  "email-domain-example-com": {
+    meta: {
+      type: "problem",
+      docs: {
+        description:
+          "enforce using the example.com domain for generator.email calls",
+      },
+      fixable: "code",
+      schema: [],
+    },
+    create: function (context) {
+      return {
+        CallExpression(node) {
+          if (
+            node.callee.type === "MemberExpression" &&
+            node.callee.object.name === "generator" &&
+            node.callee.property.name === "email" &&
+            node.arguments.length === 0
+          ) {
+            context.report({
+              node,
+              message:
+                "Prefer using generator.email with the domain \"{ domain: 'example.com' }\".",
+              fix: function (fixer) {
+                return fixer.replaceText(
+                  node,
+                  'generator.email({ domain: "example.com" })'
+                )
+              },
+            })
+          }
+        },
+      }
+    },
+  },
+  "no-barrel-imports": {
+    meta: {
+      type: "problem",
+      docs: {
+        description:
+          "Disallow imports from the top-level backend-core barrel file",
+        category: "Best Practices",
+        recommended: false,
+      },
+      schema: [], // no options
+      messages: {
+        noBarrelImport:
+          "Avoid importing from the top-level barrel file 'backend-core/src/index.ts'. Import directly from the specific module instead.",
+      },
+    },
+    create(context) {
+      return {
+        ImportDeclaration(node) {
+          const importPath = node.source.value
+          const importFullPath = path.resolve(
+            context.getFilename(),
+            "..",
+            importPath
+          )
+
+          if (backendCoreBarrelPaths.includes(importFullPath)) {
+            context.report({
+              node,
+              messageId: "noBarrelImport",
+              data: {
+                importFullPath,
+              },
+            })
+          }
+        },
+      }
+    },
+  },
+  "no-context-getglobaldb": {
+    meta: {
+      type: "problem",
+      docs: {
+        description: "Disallow context.getGlobalDB() usage in workspace SDK",
+        category: "Best Practices",
+        recommended: false,
+      },
+      fixable: "code",
+      schema: [],
+      messages: {
+        noGetGlobalDB:
+          "Use context.getWorkspaceDB() instead of context.getGlobalDB() in workspace SDK code.",
+      },
+    },
+    create(context) {
+      return {
+        CallExpression(node) {
+          const callee =
+            node.callee.type === "ChainExpression"
+              ? node.callee.expression
+              : node.callee
+
+          if (
+            callee.type === "MemberExpression" &&
+            callee.object.type === "Identifier" &&
+            callee.object.name === "context" &&
+            callee.property.type === "Identifier" &&
+            callee.property.name === "getGlobalDB"
+          ) {
+            context.report({
+              node,
+              messageId: "noGetGlobalDB",
+              fix: fixer => {
+                return fixer.replaceText(callee.property, "getWorkspaceDB")
+              },
+            })
+          }
+        },
+      }
+    },
+  },
+  "require-svelte-ts": {
+    meta: {
+      type: "suggestion",
+      docs: {
+        description:
+          "Warn when Svelte components still use non-TypeScript script blocks",
+        category: "Best Practices",
+        recommended: false,
+      },
+      schema: [],
+      messages: {
+        requireTypeScript:
+          'This Svelte component has not been migrated to TypeScript yet. Use <script lang="ts">.',
+      },
+    },
+    create(context) {
+      if (!context.getFilename().endsWith(".svelte")) {
+        return {}
+      }
+
+      let hasReported = false
+
+      return {
+        SvelteScriptElement(node) {
+          if (hasReported || hasTypeScriptLang(node)) {
+            return
+          }
+
+          hasReported = true
+          context.report({
+            node,
+            messageId: "requireTypeScript",
+          })
+        },
+      }
+    },
+  },
+}

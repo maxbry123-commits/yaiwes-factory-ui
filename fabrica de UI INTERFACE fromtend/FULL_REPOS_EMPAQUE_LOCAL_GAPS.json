@@ -1,0 +1,9 @@
+{
+  "expected_components": 14,
+  "gaps": [
+    {
+      "error": "SOURCE_REF_GAP https://github.com/wailsapp/wails ref=v3-alpha",
+      "slug": "Wails"
+    }
+  ]
+}

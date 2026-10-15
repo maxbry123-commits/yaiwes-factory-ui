@@ -1,0 +1,77 @@
+{
+  "schema": "fabrica-ui.meta-integration-state/v1",
+  "status": "IN_PROGRESS",
+  "nodes": {
+    "N1_META_DOWNLOAD": "CLOSED",
+    "N2_ARCHITECTURE": "CLOSED",
+    "N3_UI_YAIWES_INTEGRATION": "VERIFY_PENDING",
+    "N4_HANDOFF": "PENDING"
+  },
+  "workflow": "GOAL -> CODE -> RUN -> SCREENSHOT -> VERIFY -> TEST -> FIX -> RETEST -> EVIDENCE -> PASS",
+  "gaps_pendientes_integraciones": [
+    "Read-back fresh de los tres árboles Meta en UI YAIWES",
+    "Confirmar evidencia final de integración CUA+MCP",
+    "Cerrar handoff sólo después del read-back"
+  ],
+  "required_integrations": [
+    "MetaCua-Glimmer-agentic-fundamentals",
+    "CUA-MCP-and-agentic-patterns",
+    "Multi-Agent-and-Muse-Code-patterns"
+  ],
+  "component_ops": {
+    "animation_video_skills_2026_09_17": {
+      "status": "DOWNLOAD_EXTRACT_VERIFIED_MATERIALIZATION_PENDING",
+      "destination": "fabrica de UI INTERFACE fromtend/",
+      "components": [
+        {
+          "component": "manim-skill",
+          "source": "https://github.com/vumichien/manim-skill",
+          "source_commit": "70ccd68cf4dea135973f899b25fb408ddf5946c5",
+          "download": "VERIFIED_CLOSED",
+          "materialization": "PENDING",
+          "integration": "PENDING",
+          "motor_job": "6aacc2c95c02253cfb146381",
+          "source_files": 123
+        },
+        {
+          "component": "skill-canvas-video",
+          "source": "https://github.com/siegerts/skill-canvas-video",
+          "source_commit": "6419a14d9fddb5003c66e0567d927ad57f1e4f06",
+          "download": "VERIFIED_CLOSED",
+          "materialization": "PENDING",
+          "integration": "PENDING",
+          "motor_job": "6aacc2d05c02253cfb146383",
+          "source_files": 10
+        },
+        {
+          "component": "chat-animation",
+          "source": "https://github.com/xue-xiaobao/chat-animation",
+          "source_commit": "d114e627833e2461efcc233d7a63a18cf85b149a",
+          "download": "VERIFIED_CLOSED",
+          "materialization": "PENDING",
+          "integration": "PENDING",
+          "motor_job": "6aacc2d7b1dc2b62dc590818",
+          "source_files": 25
+        },
+        {
+          "component": "taste-skill",
+          "source": "https://github.com/Leonxlnx/taste-skill",
+          "source_commit": "e79ca9ec7e071eb3a3b623c4fb752e853fc3ed58",
+          "download": "VERIFIED_CLOSED",
+          "materialization": "PENDING",
+          "integration": "PENDING",
+          "motor_job": "6aacc2de5c02253cfb146385",
+          "source_files": 65
+        }
+      ],
+      "note": "Motor canónico ejecutado y download/extract verificado. Gitlinks no autorizados eliminados. Publicación física sigue pendiente; no usar métodos alternativos.",
+      "materialization_commit": "ed752eaf5164345116942473aca24375d079cd85",
+      "readback_job": "6aacc3f55c02253cfb1463cb",
+      "readback": "FRONTEND_4_OF_4_OK",
+      "download_extract_gate": "8/8 VERIFIED_CLOSED = 100% PASS",
+      "materialization_gate": "PENDING",
+      "unauthorized_gitlinks_present": false,
+      "gitmodules_present": false
+    }
+  }
+}

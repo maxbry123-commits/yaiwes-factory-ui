@@ -1,0 +1,33 @@
+# configuration for develop and master branch
+branches:
+  only:
+    - develop
+    - master
+    - /v\d*\.\d*\.\d*/
+
+image: Visual Studio 2022
+test: false
+
+pull_requests:
+  do_not_increment_build_number: false
+
+environment:
+  IGNORE_NORMALISATION_GIT_HEAD_MOVE: 1
+
+install:
+  - ps: Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1'
+  - ps: ./dotnet-install.ps1 -JSonFile ./global.json -InstallDir "C:\Program Files\dotnet"
+
+build_script:
+  - ps: dotnet --info
+  - ps: git status
+  - cmd: .\build.cmd CI
+
+after_build:
+  - ps: gci -Filter *.trx -Path .\TestResults\ | % { (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/mstest/$($env:APPVEYOR_JOB_ID)", (Resolve-Path $_.FullName)) }
+
+artifacts:
+  - path: \artifacts\*.*
+
+nuget:
+  disable_publish_on_pr: true

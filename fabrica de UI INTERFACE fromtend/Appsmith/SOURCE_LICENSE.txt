@@ -1,0 +1,16 @@
+https://github.com/appsmithorg/appsmith/blob/9755a46359aa73ff05e15693eecf272376fbf60e/LICENSE
+https://github.com/appsmithorg/appsmith/blob/9755a46359aa73ff05e15693eecf272376fbf60e/app/client/src/assets/fonts/custom/inter/license.txt
+https://github.com/appsmithorg/appsmith/blob/9755a46359aa73ff05e15693eecf272376fbf60e/app/client/src/assets/fonts/custom/monteserrat/license.txt
+https://github.com/appsmithorg/appsmith/blob/9755a46359aa73ff05e15693eecf272376fbf60e/app/client/src/assets/fonts/custom/noto-sans/license.txt
+https://github.com/appsmithorg/appsmith/blob/9755a46359aa73ff05e15693eecf272376fbf60e/app/client/src/assets/fonts/custom/nunito-sans/license.txt
+https://github.com/appsmithorg/appsmith/blob/9755a46359aa73ff05e15693eecf272376fbf60e/app/client/src/assets/fonts/custom/open-sans/license.txt
+https://github.com/appsmithorg/appsmith/blob/9755a46359aa73ff05e15693eecf272376fbf60e/app/client/src/assets/fonts/custom/poppins/license.txt
+https://github.com/appsmithorg/appsmith/blob/9755a46359aa73ff05e15693eecf272376fbf60e/app/client/src/assets/fonts/custom/roboto/license.txt
+https://github.com/appsmithorg/appsmith/blob/9755a46359aa73ff05e15693eecf272376fbf60e/app/client/src/assets/fonts/custom/rubik/license.txt
+https://github.com/appsmithorg/appsmith/blob/9755a46359aa73ff05e15693eecf272376fbf60e/app/client/src/assets/fonts/custom/twemoji/license.txt
+https://github.com/appsmithorg/appsmith/blob/9755a46359aa73ff05e15693eecf272376fbf60e/app/client/src/assets/fonts/custom/ubuntu/license.txt
+https://github.com/appsmithorg/appsmith/blob/9755a46359aa73ff05e15693eecf272376fbf60e/app/client/src/ce/utils/licenseHelpers.tsx
+https://github.com/appsmithorg/appsmith/blob/9755a46359aa73ff05e15693eecf272376fbf60e/app/client/src/ee/utils/licenseHelpers.ts
+https://github.com/appsmithorg/appsmith/blob/9755a46359aa73ff05e15693eecf272376fbf60e/app/server/appsmith-server/src/main/java/com/appsmith/server/constants/LicensePlan.java
+https://github.com/appsmithorg/appsmith/blob/9755a46359aa73ff05e15693eecf272376fbf60e/app/server/appsmith-server/src/main/java/com/appsmith/server/domains/License.java
+https://github.com/appsmithorg/appsmith/blob/9755a46359aa73ff05e15693eecf272376fbf60e/app/server/appsmith-server/src/main/java/com/appsmith/server/domains/ce/LicenseCE.java

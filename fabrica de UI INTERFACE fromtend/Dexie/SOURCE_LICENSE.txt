@@ -1,0 +1,1 @@
+{"commit": "32ad221a518a9b2375d2fed4137a4105d055c288", "license_files": ["LICENSE"], "source": "https://github.com/dexie/Dexie.js"}
