@@ -1,0 +1,281 @@
+'use strict';
+
+describe('test.limit-skip.js', () => {
+  const sortById = testUtils.sortById;
+
+  beforeEach(async () => {
+    await context.db.bulkDocs([
+      { name: 'Mario', _id: 'mario', rank: 5, series: 'Mario', debut: 1981 },
+      { name: 'Jigglypuff', _id: 'puff', rank: 8, series: 'Pokemon', debut: 1996 },
+      { name: 'Link', rank: 10, _id: 'link', series: 'Zelda', debut: 1986 },
+      { name: 'Donkey Kong', rank: 7, _id: 'dk', series: 'Mario', debut: 1981 },
+      { name: 'Pikachu', series: 'Pokemon', _id: 'pikachu', rank: 1, debut: 1996 },
+      { name: 'Captain Falcon', _id: 'falcon', rank: 4, series: 'F-Zero', debut: 1990 },
+      { name: 'Luigi', rank: 11, _id: 'luigi', series: 'Mario', debut: 1983 },
+      { name: 'Fox', _id: 'fox', rank: 3, series: 'Star Fox', debut: 1993 },
+      { name: 'Ness', rank: 9, _id: 'ness', series: 'Earthbound', debut: 1994 },
+      { name: 'Samus', rank: 12, _id: 'samus', series: 'Metroid', debut: 1986 },
+      { name: 'Yoshi', _id: 'yoshi', rank: 6, series: 'Mario', debut: 1990 },
+      { name: 'Kirby', _id: 'kirby', series: 'Kirby', rank: 2, debut: 1992 }
+    ]);
+  });
+
+  it('should work with $and 1-1', async () => {
+    const db = context.db;
+    await db.createIndex({
+      "index": {
+        "fields": ["series"]
+      }
+    });
+    await db.createIndex({
+      "index": {
+        "fields": ["debut"]
+      }
+    });
+
+    const res = await db.find({
+      selector: {
+        $and: [
+          {series: 'Mario'},
+          {debut: {$gte: 1982}}
+        ]
+      },
+      fields: ['_id'],
+      limit: 1,
+      skip: 1
+    });
+    res.docs.sort(sortById);
+    res.docs.should.deep.equal([{_id: 'yoshi'}]);
+  });
+
+  it('should work with $and 1 1-2', async () => {
+    const db = context.db;
+    await db.createIndex({
+      "index": {
+        "fields": ["series"]
+      }
+    });
+    await db.createIndex({
+      "index": {
+        "fields": ["debut"]
+      }
+    });
+    const res = await db.find({
+      selector: {
+        $and: [
+          {series: 'Mario'},
+          {debut: {$gte: 1982}}
+        ]
+      },
+      fields: ['_id'],
+      limit: 1,
+      skip: 2
+    });
+    res.docs.sort(sortById);
+    res.docs.should.deep.equal([]);
+  });
+
+  it('should work with $and 1 2-0', async () => {
+    const db = context.db;
+    await db.createIndex({
+      "index": {
+        "fields": ["series"]
+      }
+    });
+    await db.createIndex({
+      "index": {
+        "fields": ["debut"]
+      }
+    });
+    const res = await db.find({
+      selector: {
+        $and: [
+          {series: 'Mario'},
+          {debut: {$gte: 1982}}
+        ]
+      },
+      fields: ['_id'],
+      limit: 2,
+      skip: 0
+    });
+    res.docs.sort(sortById);
+    res.docs.should.deep.equal([{_id: 'luigi'}, {_id: 'yoshi'}]);
+  });
+
+  it('should work with $and 2, same index 0-1', async () => {
+    const db = context.db;
+    await db.createIndex({
+      "index": {
+        "fields": ["series", "debut"]
+      }
+    });
+    const res = await db.find({
+      selector: {
+        $and: [
+          {series: 'Mario'},
+          {debut: {$gte: 1982}}
+        ]
+      },
+      fields: ['_id'],
+      limit: 0,
+      skip: 1
+    });
+    res.docs.sort(sortById);
+    res.docs.should.deep.equal([]);
+  });
+
+  it('should work with $and 2, same index 4-2', async () => {
+    const db = context.db;
+    await db.createIndex({
+      "index": {
+        "fields": ["series", "debut"]
+      }
+    });
+    const res = await db.find({
+      selector: {
+        $and: [
+          {series: 'Mario'},
+          {debut: {$gte: 1970}}
+        ]
+      },
+      sort: ['series', 'debut'],
+      fields: ['_id'],
+      limit: 4,
+      skip: 2
+    });
+    res.docs.sort(sortById);
+    res.docs.should.deep.equal([
+      {_id: 'luigi'},
+      {_id: 'yoshi'}
+    ]);
+  });
+
+  it('should work with $and 2, same index 2-2', async () => {
+    const db = context.db;
+    await db.createIndex({
+      "index": {
+        "fields": ["series", "debut"]
+      }
+    });
+    const res = await db.find({
+      selector: {
+        $and: [
+          {series: 'Mario'},
+          {debut: {$gte: 1980}}
+        ]
+      },
+      fields: ['_id'],
+      limit: 2,
+      skip: 2
+    });
+    res.docs.sort(sortById);
+    res.docs.should.deep.equal([{_id: 'luigi'}, {_id: 'yoshi'}]);
+  });
+
+  it('should work with $and 3, index/no-index 10-0', async () => {
+    const db = context.db;
+    await db.createIndex({
+      "index": {
+        "fields": ["series"]
+      }
+    });
+    await db.createIndex({
+      "index": {
+        "fields": ["rank"]
+      }
+    });
+    const res = await db.find({
+      selector: {
+        $and: [
+          {series: 'Mario'},
+          {debut: {$lte: 1990}}
+        ]
+      },
+      fields: ['_id'],
+      limit: 10,
+      skip: 0
+    });
+    res.docs.sort(sortById);
+    res.docs.should.deep.equal([
+      {_id: 'dk'},
+      {_id: 'luigi'},
+      {_id: 'mario'},
+      {_id: 'yoshi'}
+    ]);
+  });
+
+  it('should work with $and 3, index/no-index 1-0', async () => {
+    const db = context.db;
+    await db.createIndex({
+      "index": {
+        "fields": ["series"]
+      }
+    });
+    await db.createIndex({
+      "index": {
+        "fields": ["rank"]
+      }
+    });
+    const res = await db.find({
+      selector: {
+        $and: [
+          {series: 'Star Fox'},
+          {debut: {$gte: 1982}}
+        ]
+      },
+      fields: ['_id'],
+      limit: 1,
+      skip: 0
+    });
+    res.docs.sort(sortById);
+    res.docs.should.deep.equal([{_id: 'fox'}]);
+  });
+
+  it('should work with $and 3, index/no-index 2-0', async () => {
+    const db = context.db;
+    await db.createIndex({
+      "index": {
+        "fields": ["series"]
+      }
+    });
+    await db.createIndex({
+      "index": {
+        "fields": ["rank"]
+      }
+    });
+    const res = await db.find({
+      selector: {
+        $and: [
+          {series: 'Mario'},
+          {debut: {$gte: 1983}}
+        ]
+      },
+      fields: ['_id'],
+      limit: 2,
+      skip: 0
+    });
+    res.docs.sort(sortById);
+    res.docs.should.deep.equal([{_id: 'luigi'}, {_id: 'yoshi'}]);
+  });
+
+  it('should work with $and 4, wrong index', async () => {
+    const db = context.db;
+    await db.createIndex({
+      "index": {
+        "fields": ["rank"]
+      }
+    });
+    const resp = await db.find({
+      selector: {
+        $and: [
+          {series: 'Mario'},
+          {debut: {$gte: 1990}}
+        ]
+      },
+      fields: ['_id'],
+      limit: 1,
+      skip: 1
+    });
+    resp.docs.should.deep.equal([]);
+  });
+});

@@ -1,0 +1,11 @@
+{% if include.href %}
+  {% assign href = include.href %}
+{% else %}
+  {% capture href %}{{ site.baseurl }}/static/img/{{ include.src }}{% endcapture %}
+{% endif %}
+
+<p>
+  <a href="{{ href }}" target="_blank">
+    <img class="img-responsive" {% if include.width %} width="{{include.width}}" {% endif %} src="{{ site.baseurl }}/static/img/{{ include.src }}" alt="{{ include.alt }}" />
+  </a>
+</p>

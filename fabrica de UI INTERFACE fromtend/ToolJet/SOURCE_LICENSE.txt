@@ -1,0 +1,13 @@
+https://github.com/ToolJet/ToolJet/blob/10eacedcb587f37469f0a92f83459b0be0c1d537/.github/workflows/license-compliance.yml
+https://github.com/ToolJet/ToolJet/blob/10eacedcb587f37469f0a92f83459b0be0c1d537/LICENSE
+https://github.com/ToolJet/ToolJet/blob/10eacedcb587f37469f0a92f83459b0be0c1d537/frontend/assets/libs/pyodide-0.23.2/fonts/LICENSE_DEJAVU
+https://github.com/ToolJet/ToolJet/blob/10eacedcb587f37469f0a92f83459b0be0c1d537/frontend/assets/libs/pyodide-0.23.2/fonts/LICENSE_STIX
+https://github.com/ToolJet/ToolJet/blob/10eacedcb587f37469f0a92f83459b0be0c1d537/frontend/src/AppBuilder/_stores/slices/licenseSlice.js
+https://github.com/ToolJet/ToolJet/blob/10eacedcb587f37469f0a92f83459b0be0c1d537/frontend/src/_components/ErrorComponents/LicenseUpgradeErrorModal.jsx
+https://github.com/ToolJet/ToolJet/blob/10eacedcb587f37469f0a92f83459b0be0c1d537/frontend/src/_services/license.service.js
+https://github.com/ToolJet/ToolJet/blob/10eacedcb587f37469f0a92f83459b0be0c1d537/frontend/src/_stores/licenseStore.js
+https://github.com/ToolJet/ToolJet/blob/10eacedcb587f37469f0a92f83459b0be0c1d537/frontend/src/_styles/license.scss
+https://github.com/ToolJet/ToolJet/blob/10eacedcb587f37469f0a92f83459b0be0c1d537/frontend/src/modules/common/components/LicenseBanner/LicenseBanner.jsx
+https://github.com/ToolJet/ToolJet/blob/10eacedcb587f37469f0a92f83459b0be0c1d537/server/src/modules/group-permissions/util-services/license.util.service.ts
+https://github.com/ToolJet/ToolJet/blob/10eacedcb587f37469f0a92f83459b0be0c1d537/server/src/modules/licensing/configs/License.ts
+https://github.com/ToolJet/ToolJet/blob/10eacedcb587f37469f0a92f83459b0be0c1d537/server/src/modules/licensing/configs/LicenseBase.ts

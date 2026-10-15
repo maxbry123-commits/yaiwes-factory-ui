@@ -1,0 +1,6 @@
+{% import "layouts/postcard.njk" as cardLayouts %}
+
+<section class="my-8">
+  {% include 'categories.njk' %}
+  {{ cardLayouts.featured(posts)}}
+</section>

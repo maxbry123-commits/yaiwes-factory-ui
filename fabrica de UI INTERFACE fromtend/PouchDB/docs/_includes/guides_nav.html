@@ -1,0 +1,7 @@
+{% for guide in collections.guides %}
+    {% assign title = guide.data.title %}
+    {% if guide.data.nav %}
+        {% assign title = guide.data.nav %}
+    {% endif %}
+    {% include nav_item.html path=guide.url text=title %}
+{% endfor %}

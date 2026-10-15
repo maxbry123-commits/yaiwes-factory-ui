@@ -1,0 +1,16 @@
+---
+permalink: "{% if path %}{{ path | slug }}{% else %}{{'/posts/'}}{{ title | slug }}{% endif %}/index.html"
+---
+{% import "layouts/postcard.njk" as cardLayouts %}
+
+{% extends 'layouts/basepost.njk' %}
+{% block body %}
+  <div class="mb-4">
+    {{ content | safe }}
+  </div>
+
+  <div class="mb-8">
+    <span class="text-[#808080] mr-4 text-sm">Share this article on your social media!</span>
+    {% include 'share-button.njk' %}
+  </div>
+{% endblock %}

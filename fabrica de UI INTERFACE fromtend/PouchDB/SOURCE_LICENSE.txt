@@ -1,0 +1,1 @@
+{"commit": "27de91f1105a8074ddd06f5a23156dd99c4eb016", "license_files": ["LICENSE"], "source": "https://github.com/pouchdb/pouchdb"}

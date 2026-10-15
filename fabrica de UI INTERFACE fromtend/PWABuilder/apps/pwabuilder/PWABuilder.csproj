@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>8c239d4f-255c-44bb-add6-d027783831f5</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.17.1" />
+    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.51.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.25.0" />
+    <PackageReference Include="Azure.Storage.Queues" Version="12.26.0" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.12.2" />
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.23.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
+    <PackageReference Include="Microsoft.Azure.StackExchangeRedis" Version="3.3.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Newtonsoft.Json.Schema" Version="4.0.1" />
+    <PackageReference Include="PuppeteerSharp" Version="25.1.2" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
+    <PackageReference Include="SkiaSharp" Version="3.119.2" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.2" />
+    <PackageReference Include="Svg.Skia" Version="3.4.1" />
+    <PackageReference Include="StackExchange.Redis" Version="2.10.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+  <Target Name="EnsureWebRootExists" BeforeTargets="Build">
+    <Message Importance="high" Text="Ensuring wwwroot folder exists" />
+    <PropertyGroup>
+      <WebRootPath>$(ProjectDir)wwwroot</WebRootPath>
+    </PropertyGroup>
+    <Exec Command="mkdir $(WebRootPath)" Condition="!Exists('$(WebRootPath)')" />
+  </Target>
+  <ItemGroup>
+    <PublicFilesToCopyToWwwroot Include="Frontend\public\*.*" />
+  </ItemGroup>
+  <Target Name="CopyPublicFilesToWwwroot" BeforeTargets="Build" Condition="$(Configuration) != 'Release'">
+    <Message Text="Copying files from /public to /wwwroot" Importance="high" />
+    <Copy SourceFiles="@(PublicFilesToCopyToWwwroot)" DestinationFolder="wwwroot" SkipUnchangedFiles="true" />
+  </Target>
+  <Target Name="CompileClient" AfterTargets="PostBuildEvent" Condition="$(Configuration) == 'Release'">
+    <Message Text="Building frontend..." Importance="high" />
+    <Exec ContinueOnError="True" Command="del /F /q wwwroot\code" />
+    <Exec WorkingDirectory="./Frontend" Command="npm install" />
+    <Exec WorkingDirectory="./Frontend" Command="npm run build" />
+    <Move SourceFiles="wwwroot\index.html" DestinationFiles="wwwroot\vite-index.html" ContinueOnError="true" />
+  </Target>
+  <ItemGroup>
+    <None Update="Resources\IOS\ios-next-steps.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IOS\**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  
+  <!-- Ensure environment-specific appsettings files are published -->
+  <ItemGroup>
+    <Content Update="appsettings.Production.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="appsettings.Staging.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+</Project>

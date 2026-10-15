@@ -1,0 +1,45 @@
+{% if post %}
+  {% assign author        = post.data.author %}
+  {% assign post_date     = post.date %}
+  {% assign modified_date = post.modified_date %}
+  {% assign url           = post.url %}
+{% else %}
+  {% assign post_date     = page.date %}
+{% endif %}
+
+{% assign post_author = author %}
+{% assign avatar = '' %}
+
+{% for a in authors %}
+  {% if a.name == author %}
+    {% if a.twitter %}
+      {% capture post_author %}<a href="https://twitter.com/{{a.twitter}}">{{ author }}</a>{% endcapture %}
+    {% endif %}
+    {% if a.avatar %}
+      {% capture avatar %}<img class="pull-left media-object img-circle img-responsive" src='{{ site.baseurl }}/static/img/authors/{{ a.avatar }}' alt='{{ author }}'>{% endcapture %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+{% if modified_date %}
+  {% capture modified_date %}<strong>Updated:</strong> {{ modified_date | date_to_long_string }}<br>{% endcapture %}
+{% endif %}
+
+<div class="post">
+  <div class="media">
+    {{ avatar }}
+    <div class="media-body">
+    <p>
+      <strong>By:</strong> {{ post_author }}<br>
+      <strong>Published:</strong> {{ post_date | date_to_long_string }}<br>
+      {% if page.url == "/blog/" or page.url contains "/blog/page" or page.url == "/" %}
+        {% if post.page.excerpt %}
+          {{ post.page.excerpt | liquid | markdown | strip_html | truncatewords: 30, '' }}
+        {% else %}
+          {{ post.content | first_paragraph | strip_html | truncatewords: 30, '' }}
+        {% endif %}<a href='{{ site.baseurl }}{{ url }}'>[...]</a>
+      {% endif %}
+    </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,370 @@
+using PWABuilder.Models;
+
+namespace PWABuilder.Services;
+
+/// <summary>
+/// Background service that periodically checks for new AnalysisJob objects in the queue and processes them.
+/// </summary>
+public class AnalysisJobProcessor : IHostedService
+{
+    private const int MaxRetryCount = 3;
+    private const int JobTimeoutSeconds = 180;
+    private readonly IAnalysisJobQueue queue;
+    private readonly IAnalysisStore analysisStore;
+    private CancellationTokenSource? abortToken;
+    private Task? jobProcessorTask;
+    private readonly ManifestDetector manifestDetector;
+    private readonly ManifestAnalyzer manifestAnalyzer;
+    private readonly ServiceWorkerDetector serviceWorkerDetector;
+    private readonly IServiceWorkerAnalyzer serviceWorkerAnalyzer;
+    private readonly GeneralWebAppCapabilityDetector generalWebAppCapabilityDetector;
+    private readonly AnalysisJobProcessorHealthMonitor healthMonitor;
+    private readonly ILogger<AnalysisJobProcessor> logger;
+
+    public AnalysisJobProcessor(
+        IAnalysisJobQueue queue,
+        IAnalysisStore analysisStore,
+        ManifestDetector manifestDetector,
+        ManifestAnalyzer manifestAnalyzer,
+        ServiceWorkerDetector serviceWorkerDetector,
+        IServiceWorkerAnalyzer serviceWorkerAnalyzer,
+        GeneralWebAppCapabilityDetector generalWebAppCapabilityDetector,
+        AnalysisJobProcessorHealthMonitor healthMonitor,
+        ILogger<AnalysisJobProcessor> logger)
+    {
+        this.queue = queue;
+        this.analysisStore = analysisStore;
+        this.manifestDetector = manifestDetector;
+        this.manifestAnalyzer = manifestAnalyzer;
+        this.serviceWorkerDetector = serviceWorkerDetector;
+        this.serviceWorkerAnalyzer = serviceWorkerAnalyzer;
+        this.generalWebAppCapabilityDetector = generalWebAppCapabilityDetector;
+        this.healthMonitor = healthMonitor;
+        this.logger = logger;
+    }
+
+    public Task StartAsync(CancellationToken cancellationToken)
+    {
+        logger.LogInformation("AnalysisJobProcessor: StartAsync called. Starting background job processing loop.");
+        this.abortToken = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        this.jobProcessorTask = Task.Factory.StartNew(() => ListenForJobs(abortToken.Token), abortToken.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+        return Task.CompletedTask;
+    }
+
+    public async Task StopAsync(CancellationToken stoppingToken)
+    {
+        if (abortToken != null)
+        {
+            await abortToken.CancelAsync();
+        }
+        if (jobProcessorTask != null)
+        {
+            await jobProcessorTask;
+        }
+    }
+
+    private async Task ListenForJobs(CancellationToken cancelToken)
+    {
+        logger.LogInformation("AnalysisJobProcessor: ListenForJobs loop started.");
+
+        // In a loop, check for new AnalysisJob objects in the Analysis queue.
+        while (!cancelToken.IsCancellationRequested)
+        {
+            var job = await TryDequeueAsync(cancelToken);
+            if (job != null)
+            {
+                logger.LogInformation("AnalysisJobProcessor: Dequeued job {jobId} for analysis {analysisId}, URL {url}.", job.Id, job.AnalysisId, job.Url);
+                await TryProcessJobAsync(job, cancelToken);
+            }
+            else
+            {
+                // No jobs? Wait a few seconds before checking again.
+                await Task.Delay(TimeSpan.FromSeconds(3), cancelToken);
+            }
+        }
+
+        logger.LogInformation("AnalysisJobProcessor: ListenForJobs loop exited. Cancellation requested: {cancelled}.", cancelToken.IsCancellationRequested);
+        healthMonitor.JobProcessingCancelled();
+    }
+
+    private async Task<AnalysisJob?> TryDequeueAsync(CancellationToken cancelToken)
+    {
+        try
+        {
+            var job = await queue.DequeueAsync(cancelToken);
+            if (job is null)
+            {
+                logger.LogTrace("AnalysisJobProcessor: Dequeue returned null (queue empty).");
+            }
+            return job;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "AnalysisJobProcessor: Error dequeueing analysis job.");
+            return null;
+        }
+    }
+
+    private async Task TryProcessJobAsync(AnalysisJob job, CancellationToken cancelToken)
+    {
+        try
+        {
+            this.healthMonitor.MarkAnalysisAsStarted(job.AnalysisId);
+
+            using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancelToken);
+            timeoutCts.CancelAfter(TimeSpan.FromSeconds(JobTimeoutSeconds));
+
+            await ProcessJobAsync(job, timeoutCts.Token);
+            this.healthMonitor.MarkAnalysisAsCompleted();
+            logger.LogInformation("AnalysisJobProcessor: Successfully processed job {jobId} for analysis {analysisId}.", job.Id, job.AnalysisId);
+        }
+        catch (OperationCanceledException) when (!cancelToken.IsCancellationRequested)
+        {
+            // The job timed out, but the app itself isn't shutting down. Retry or fail.
+            this.healthMonitor.MarkAnalysisAsCompleted();
+            var timeoutError = new TimeoutException($"Analysis job timed out after {JobTimeoutSeconds} seconds.");
+            logger.LogError(timeoutError, "AnalysisJobProcessor: Job {jobId} for analysis {analysisId} timed out after {timeout} seconds. Attempting retry.", job.Id, job.AnalysisId, JobTimeoutSeconds);
+            await RetryJobOrFail(job, timeoutError);
+        }
+        catch (Exception error)
+        {
+            this.healthMonitor.MarkAnalysisAsCompleted();
+            logger.LogError(error, "AnalysisJobProcessor: Exception while processing job {jobId} for analysis {analysisId}. Attempting retry.", job.Id, job.AnalysisId);
+            await RetryJobOrFail(job, error);
+        }
+    }
+
+    private async Task ProcessJobAsync(AnalysisJob job, CancellationToken cancelToken)
+    {
+        logger.LogInformation("AnalysisJobProcessor: Processing job {jobId}. Looking up analysis {analysisId}.", job.Id, job.AnalysisId);
+
+        // Grab the actual analysis object from the database.
+        var analysis = await analysisStore.GetByIdAsync(job.AnalysisId);
+        if (analysis == null)
+        {
+            logger.LogWarning("AnalysisJobProcessor: Analysis {analysisId} not found in Redis. Retry count: {retryCount}.", job.AnalysisId, job.RetryCount);
+            await RetryJobOrFail(job, new Exception($"Analysis with ID {job.AnalysisId} was not found."));
+            return;
+        }
+
+        logger.LogInformation("AnalysisJobProcessor: Found analysis {analysisId} with status {status}. Beginning processing.", job.AnalysisId, analysis.Status);
+
+        // Create a new AnalysisLogger that will log message both to the Analysis.Logs object and to this service's logger.
+        var analysisLogger = new AnalysisLogger(analysis, this.logger);
+
+        // Mark the analysis as processing.
+        analysis.Status = AnalysisStatus.Processing;
+        await analysisStore.SaveAsync(analysis);
+
+        // Create our own cancellation token source so that we can manually cancel this.
+        // Link it to the parent cancellation token to monitor that as well.
+        var cancelTokenSrc = CancellationTokenSource.CreateLinkedTokenSource(cancelToken);
+
+        // Kick off the independent jobs simultaneously so that our analysis completes faster.
+        var generalCapDetectionTask = generalWebAppCapabilityDetector.TryDetectAsync(job.Url, analysisLogger, cancelTokenSrc.Token);
+        var serviceWorkerDetectionTask = serviceWorkerDetector.TryDetectAsync(job.Url, analysisLogger, cancelTokenSrc.Token);
+        var serviceWorkerAnalysisTask = serviceWorkerDetectionTask.ContinueWith(t => serviceWorkerAnalyzer.TryAnalyzeServiceWorkerAsync(t.Result, job.Url, analysisLogger, cancelTokenSrc.Token), TaskContinuationOptions.OnlyOnRanToCompletion).Unwrap(); // This will update analysis.Capabilities.
+        var serviceWorkerOfflineTask = serviceWorkerDetectionTask.ContinueWith(t => serviceWorkerAnalyzer.TryRunOfflineCheck(t.Result, job.Url, analysisLogger, cancelTokenSrc.Token), TaskContinuationOptions.OnlyOnRanToCompletion).Unwrap(); // This will update analysis.Capabilities
+        var manifestDetectionTask = manifestDetector.TryDetectAsync(job.Url, analysisLogger, cancelTokenSrc.Token);
+        var manifestAnalysisTask = manifestDetectionTask.ContinueWith(t => manifestAnalyzer.TryAnalyzeManifestAsync(t.Result, logger, cancelTokenSrc.Token), TaskContinuationOptions.OnlyOnRanToCompletion).Unwrap();
+
+        // Step 1: run the general capabilities, such as whether the URL serves HTML. If not, we fail fast.
+        var generalCapabilities = await generalCapDetectionTask;
+        analysis.ProcessCapabilities(generalCapabilities);
+        var servesHtmlStatus = FailIfNotServedHtml(analysis, cancelTokenSrc);
+        await analysisStore.SaveAsync(analysis);
+        if (servesHtmlStatus == PwaCapabilityCheckStatus.Failed)
+        {
+            logger.LogWarning("Completed analysis {id} for {url} in {duration} seconds. The URL does not appear to serve HTML content, so no further analysis was performed.", analysis.Id, job.Url, analysis.Duration?.TotalSeconds);
+            return;
+        }
+
+        // Step 2: find the manifest.
+        analysis.WebManifest = await manifestDetectionTask;
+        await analysisStore.SaveAsync(analysis);
+
+        // Step 3: analyze the manifest for validity and capabilities.
+        var manifestCapabilities = await manifestAnalysisTask;
+        analysis.ProcessCapabilities(manifestCapabilities);
+        await analysisStore.SaveAsync(analysis);
+
+        // Step 3.5: if the manifest contains inline base64-encoded images, halt analysis immediately.
+        // Such manifests can't be published to app stores and their large inline images bloat the pipeline
+        // (slow service worker/offline checks, oversized documents that fail to persist), so we stop here with
+        // the base64 error surfaced rather than running the remaining checks for several minutes.
+        if (HaltIfManifestHasBase64Images(analysis, cancelTokenSrc))
+        {
+            analysis.Duration = DateTimeOffset.UtcNow.Subtract(analysis.CreatedAt);
+            analysisLogger.FlushLogs();
+            logger.LogWarning("Halted analysis {id} for {url} after {duration} seconds because the manifest contains inline base64-encoded images. Remaining checks were skipped.", analysis.Id, job.Url, analysis.Duration?.TotalSeconds);
+            await analysisStore.SaveAsync(analysis);
+            return;
+        }
+
+        // Step 4: find the service worker.
+        analysis.ServiceWorker = await serviceWorkerDetectionTask;
+        await analysisStore.SaveAsync(analysis);
+
+        // Step 5: analyze the service worker to determine capabilities like push notifications, background sync, etc.
+        var swCapabilities = await serviceWorkerAnalysisTask;
+        analysis.ProcessCapabilities(swCapabilities);
+        await analysisStore.SaveAsync(analysis);
+
+        // Step 6, check for HTTPS.
+        var httpsCapabilities = TryCheckHttpsCapabilities(job.Url, analysis.WebManifest, analysis.ServiceWorker);
+        analysis.ProcessCapabilities(httpsCapabilities);
+        await analysisStore.SaveAsync(analysis);
+
+        // Step 7, check for offline capability.
+        var offlineCapability = await serviceWorkerOfflineTask;
+        analysis.ProcessCapabilities([offlineCapability]);
+        await analysisStore.SaveAsync(analysis);
+
+        // All done! Mark the analysis as completed.
+        analysis.Status = AnalysisStatus.Completed;
+        analysis.Duration = DateTimeOffset.UtcNow.Subtract(analysis.CreatedAt);
+        analysisLogger.FlushLogs();
+        logger.LogInformation("Completed analysis {id} for {url} in {duration} seconds. Manifest result {manifest}, Service worker result {sw}, score {score}", analysis.Id, job.Url, analysis.Duration?.TotalSeconds, analysis.WebManifest?.Url, analysis.ServiceWorker?.Url, analysis.Capabilities.Count(c => c.Status == PwaCapabilityCheckStatus.Passed));
+        await analysisStore.SaveAsync(analysis);
+    }
+
+    /// <summary>
+    /// Checks if the "URL serves HTML" check failed. If so, the analysis is marked as failed, the cancellation token is triggered, and any remaining tests are skipped.
+    /// </summary>
+    /// <param name="analysis">The analysis.</param>
+    /// <param name="cancelTokenSrc">The cancellation token source.</param>
+    /// <returns>The status of the "URL serves HTML" check.</returns>
+    private static PwaCapabilityCheckStatus FailIfNotServedHtml(Analysis analysis, CancellationTokenSource cancelTokenSrc)
+    {
+        var servedHtmlCapability = analysis.Capabilities.First(c => c.Id == PwaCapabilityId.ServesHtml);
+        if (servedHtmlCapability.Status == PwaCapabilityCheckStatus.Failed)
+        {
+            cancelTokenSrc.Cancel();
+            analysis.Status = AnalysisStatus.Completed;
+            analysis.Error = "The provided URL does not appear to serve HTML content.";
+            analysis.Capabilities
+                .Where(capability => capability.Status == PwaCapabilityCheckStatus.InProgress)
+                .ToList()
+                .ForEach(capability => capability.Status = PwaCapabilityCheckStatus.Skipped);
+        }
+
+        return servedHtmlCapability.Status;
+    }
+
+    /// <summary>
+    /// Checks whether the detected manifest contains inline base64-encoded images. If so, the analysis is halted:
+    /// the cancellation token is triggered to stop in-flight detection, any remaining in-progress checks are
+    /// skipped, and the analysis is marked as completed so the base64 error is surfaced to the user without
+    /// waiting on the slower service worker and offline checks.
+    /// </summary>
+    /// <param name="analysis">The analysis.</param>
+    /// <param name="cancelTokenSrc">The cancellation token source used to abort remaining work.</param>
+    /// <returns><c>true</c> if the manifest had base64-encoded images and analysis was halted; otherwise <c>false</c>.</returns>
+    private static bool HaltIfManifestHasBase64Images(Analysis analysis, CancellationTokenSource cancelTokenSrc)
+    {
+        if (analysis.WebManifest?.HasBase64EncodedImages is not true)
+        {
+            return false;
+        }
+
+        cancelTokenSrc.Cancel();
+        analysis.Status = AnalysisStatus.Completed;
+        analysis.Capabilities
+            .Where(capability => capability.Status == PwaCapabilityCheckStatus.InProgress)
+            .ToList()
+            .ForEach(capability => capability.Status = PwaCapabilityCheckStatus.Skipped);
+        return true;
+    }
+
+    // private async Task<LighthouseReport?> TryRunLighthouseAudit(AnalysisJob job, AnalysisLogger logger, CancellationToken cancelToken)
+    // {
+    //     try
+    //     {
+    //         return await lighthouse.RunAuditAsync(job.Url, BrowserFormFactor.Desktop, logger, cancelToken);
+    //     }
+    //     catch (Exception error)
+    //     {
+    //         logger.LogError(error, "Error running Lighthouse audit for {url}", job.Url);
+    //         return null;
+    //     }
+    // }
+
+    private List<PwaCapability> TryCheckHttpsCapabilities(Uri url, ManifestDetection? manifestDetection, ServiceWorkerDetection? swDetection)
+    {
+        var httpsCapabilities = PwaCapability.CreateHttpsCapabilities(); // There's only one HTTPS capability right now: has HTTPS
+        try
+        {
+            var hasHttps = httpsCapabilities.First(c => c.Id == PwaCapabilityId.HasHttps);
+            if (url.Scheme != Uri.UriSchemeHttps)
+            {
+                // Mark as failed.
+                hasHttps.Status = PwaCapabilityCheckStatus.Failed;
+            }
+
+            // If we have a manifest, check if it has any HTTP URLs.
+            if (manifestDetection?.Url != null && manifestDetection.Url.Scheme != Uri.UriSchemeHttps)
+            {
+                hasHttps.Status = PwaCapabilityCheckStatus.Failed;
+            }
+
+            // If we have a service worker, check if it was served over HTTPS.
+            if (swDetection?.Url != null && swDetection.Url.Scheme != Uri.UriSchemeHttps)
+            {
+                hasHttps.Status = PwaCapabilityCheckStatus.Failed;
+            }
+
+            hasHttps.Status = PwaCapabilityCheckStatus.Passed;
+            return httpsCapabilities;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error detecting HTTPS capabilities for {url}", url);
+            httpsCapabilities.ForEach(c => c.Status = PwaCapabilityCheckStatus.Skipped);
+            return httpsCapabilities;
+        }
+    }
+
+    private async Task RetryJobOrFail(AnalysisJob job, Exception error)
+    {
+        if (job.RetryCount < MaxRetryCount)
+        {
+            logger.LogWarning(error, "Error processing AnalysisJob {id} for {url} during attempt {number} of {max}. Retrying...", job.Id, job.AnalysisId, job.RetryCount + 1, MaxRetryCount);
+            job.RetryCount++;
+            await queue.EnqueueAsync(job);
+            logger.LogInformation("Re-enqueued AnalysisJob with ID {JobId} for retry.", job.Id);
+        }
+        else
+        {
+            logger.LogError("AnalysisJob with ID {JobId} has exceeded maximum retry attempts. Job will not be re-enqueued and the analysis will be marked as failed.", job.Id);
+
+            // Try to grab the analysis object. 
+            await this.MarkAnalysisAsFailedAsync(job.AnalysisId, error);
+        }
+    }
+
+    private async Task MarkAnalysisAsFailedAsync(string analysisId, Exception error)
+    {
+        try
+        {
+            var analysis = await analysisStore.GetByIdAsync(analysisId);
+            if (analysis != null)
+            {
+                analysis.Status = AnalysisStatus.Failed;
+                analysis.Error = error.ToString();
+                analysis.Capabilities
+                    .Where(capability => capability.Status == PwaCapabilityCheckStatus.InProgress)
+                    .ToList()
+                    .ForEach(capability => capability.Status = PwaCapabilityCheckStatus.Skipped);
+                await analysisStore.SaveAsync(analysis);
+            }
+            else
+            {
+                logger.LogWarning("Attempted to mark analysis as failed, but couldn't find the analysis with ID {id}.", analysisId);
+            }
+        }
+        catch (Exception markAsFailedError)
+        {
+            logger.LogError(markAsFailedError, "Error marking analysis {id} as failed.", analysisId);
+        }
+    }
+}
