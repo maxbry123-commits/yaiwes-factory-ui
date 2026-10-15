@@ -1,0 +1,38 @@
+{
+  "task_id": "fabrica-ui-28-012",
+  "run_id": "34198092351",
+  "files": [
+    {
+      "component": "Appsmith",
+      "parts": 0,
+      "path": "app/client/cypress/fixtures/Videos/brokenQRCode.y4m",
+      "source_blob": "f3f960777bcbbf472bd2c68f380ddeda58ce395a",
+      "source_commit": "9755a46359aa73ff05e15693eecf272376fbf60e",
+      "source_mode": "100644",
+      "source_size": 46656172,
+      "source_url": "https://github.com/appsmithorg/appsmith",
+      "destination": "fabrica de UI INTERFACE fromtend/Appsmith/app/client/cypress/fixtures/Videos/brokenQRCode.y4m",
+      "operation": "DOWNLOAD_PINNED_GIT_BLOB",
+      "blob": "f3f960777bcbbf472bd2c68f380ddeda58ce395a",
+      "bytes": 46656172,
+      "status": "PREPARED",
+      "sha256": "1673e1c05803ef91c5d3f421620fe93d2e07520dcec089517af84b01ad16e5db"
+    },
+    {
+      "component": "Appsmith",
+      "parts": 0,
+      "path": "app/client/cypress/fixtures/Videos/defaultVideo.y4m",
+      "source_blob": "3b3f5effca5ac87caa0c0913f3f44fec3dedb311",
+      "source_commit": "9755a46359aa73ff05e15693eecf272376fbf60e",
+      "source_mode": "100644",
+      "source_size": 11406644,
+      "source_url": "https://github.com/appsmithorg/appsmith",
+      "destination": "fabrica de UI INTERFACE fromtend/Appsmith/app/client/cypress/fixtures/Videos/defaultVideo.y4m",
+      "operation": "DOWNLOAD_PINNED_GIT_BLOB",
+      "blob": "3b3f5effca5ac87caa0c0913f3f44fec3dedb311",
+      "bytes": 11406644,
+      "status": "PREPARED",
+      "sha256": "df88d83cbf6d99f3ec41f2c1fd2e67665d2a71ff8caa08f8b6bc46bf4567ea2e"
+    }
+  ]
+}

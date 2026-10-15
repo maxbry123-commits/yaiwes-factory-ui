@@ -1,0 +1,22 @@
+{
+  "task_id": "fabrica-ui-28-012",
+  "run_id": "34198092351",
+  "files": [
+    {
+      "component": "Appsmith",
+      "parts": 0,
+      "path": "app/client/cypress/fixtures/Videos/multipleQRCodes.y4m",
+      "source_blob": "3afab4031e93c19f781e0b2dc1988cbebcb2493d",
+      "source_commit": "9755a46359aa73ff05e15693eecf272376fbf60e",
+      "source_mode": "100644",
+      "source_size": 46656172,
+      "source_url": "https://github.com/appsmithorg/appsmith",
+      "destination": "fabrica de UI INTERFACE fromtend/Appsmith/app/client/cypress/fixtures/Videos/multipleQRCodes.y4m",
+      "operation": "DOWNLOAD_PINNED_GIT_BLOB",
+      "blob": "3afab4031e93c19f781e0b2dc1988cbebcb2493d",
+      "bytes": 46656172,
+      "status": "PREPARED",
+      "sha256": "e171e863953d5044dbe262b66996088bee9d9ecdd834c507e09a637d75f0d7c4"
+    }
+  ]
+}

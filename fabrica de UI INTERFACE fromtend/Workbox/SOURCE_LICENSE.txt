@@ -1,0 +1,1 @@
+{"commit": "4ea3138a120fd2c87389b54130e25f47e0fd7089", "license_files": ["LICENSE"], "source": "https://github.com/GoogleChrome/workbox"}

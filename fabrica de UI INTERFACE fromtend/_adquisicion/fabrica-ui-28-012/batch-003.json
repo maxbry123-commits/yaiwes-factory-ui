@@ -1,0 +1,22 @@
+{
+  "task_id": "fabrica-ui-28-012",
+  "run_id": "34198092351",
+  "files": [
+    {
+      "component": "Appsmith",
+      "parts": 0,
+      "path": "app/client/cypress/fixtures/Videos/highDensityQRCode.y4m",
+      "source_blob": "cdb2ce37acce7bcac325ee0ff00912a2d2ada449",
+      "source_commit": "9755a46359aa73ff05e15693eecf272376fbf60e",
+      "source_mode": "100644",
+      "source_size": 46656172,
+      "source_url": "https://github.com/appsmithorg/appsmith",
+      "destination": "fabrica de UI INTERFACE fromtend/Appsmith/app/client/cypress/fixtures/Videos/highDensityQRCode.y4m",
+      "operation": "DOWNLOAD_PINNED_GIT_BLOB",
+      "blob": "cdb2ce37acce7bcac325ee0ff00912a2d2ada449",
+      "bytes": 46656172,
+      "status": "PREPARED",
+      "sha256": "8df705729db7d896f45fe0793b7095547866eaef0cbb0cc3896dbe3c7a5c7620"
+    }
+  ]
+}

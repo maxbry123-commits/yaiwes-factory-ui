@@ -1,0 +1,1 @@
+{"commit": "fb78c77ee583fb727a558c439b5174aca38c5924", "license_files": ["LICENSE"], "source": "https://github.com/localForage/localForage"}

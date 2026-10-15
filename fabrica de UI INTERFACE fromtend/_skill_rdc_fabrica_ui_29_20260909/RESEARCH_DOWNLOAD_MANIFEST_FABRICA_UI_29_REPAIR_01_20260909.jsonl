@@ -1,0 +1,5 @@
+{"number": 1, "parts": 1, "slug": "GrapesJS", "source": "https://github.com/GrapesJS/grapesjs.git", "source_commit": "2bdeda85b82b8b9ceae42fd6558cbbcae5ec2d21", "status": "COMPLETE"}
+{"number": 2, "parts": 1, "slug": "Puck", "source": "https://github.com/measuredco/puck.git", "source_commit": "74a42c74db2b52da13ce1fc49087a07a6653dac8", "status": "COMPLETE"}
+{"number": 3, "parts": 1, "slug": "Craft.js", "source": "https://github.com/prevwong/craft.js.git", "source_commit": "23f44f3208ebf78d1632ec4aa7094001f513eb41", "status": "COMPLETE"}
+{"number": 4, "parts": 8, "slug": "Plasmic", "source": "https://github.com/plasmicapp/plasmic.git", "source_commit": "2c4beb179d3b5bc6d8a9c92900c9b14a6eb8f600", "status": "COMPLETE"}
+{"number": 5, "parts": 2, "slug": "Onlook", "source": "https://github.com/onlook-dev/onlook.git", "source_commit": "423e2e924366419e418ee049093872d535eea41a", "status": "COMPLETE"}

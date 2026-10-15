@@ -1,0 +1,71 @@
+name: Test Suite
+
+on: [pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  Node_Tests_Windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Get npm cache directory
+        id: npm-cache
+        run: |
+          echo "::set-output name=dir::$(npm config get cache)"
+      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: ${{ steps.npm-cache.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Setup
+        run: |
+          npm ci
+          npx gulp build
+
+      - run: npx gulp test_node
+
+  Full_Suite_Mac:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version-file: '.nvmrc'
+
+      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: ~/.selenium-assistant
+          key: ${{ runner.os }}-selenium-assistant-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-selenium-assistant-
+
+      - name: Setup
+        run: |
+          sudo safaridriver --enable
+          npm ci
+          npx gulp build
+
+      - run: npx gulp test

@@ -1,0 +1,22 @@
+{
+  "task_id": "fabrica-ui-28-012",
+  "run_id": "34198092351",
+  "files": [
+    {
+      "component": "Appsmith",
+      "parts": 0,
+      "path": "app/client/cypress/fixtures/Videos/invalidQRCode.y4m",
+      "source_blob": "c946bea150a53e8425f872b69fc77989dd405b89",
+      "source_commit": "9755a46359aa73ff05e15693eecf272376fbf60e",
+      "source_mode": "100644",
+      "source_size": 46656172,
+      "source_url": "https://github.com/appsmithorg/appsmith",
+      "destination": "fabrica de UI INTERFACE fromtend/Appsmith/app/client/cypress/fixtures/Videos/invalidQRCode.y4m",
+      "operation": "DOWNLOAD_PINNED_GIT_BLOB",
+      "blob": "c946bea150a53e8425f872b69fc77989dd405b89",
+      "bytes": 46656172,
+      "status": "PREPARED",
+      "sha256": "2923357bc974bd09437396ce0d54325cec32683ed6f7f520b1ed2f6c5dd736e9"
+    }
+  ]
+}

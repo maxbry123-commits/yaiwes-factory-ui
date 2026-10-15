@@ -1,0 +1,14 @@
+{"number": 1, "parts": 2, "slug": "Tauri-2", "source": "https://github.com/tauri-apps/tauri.git", "source_commit": "e19121427332c8a14165999251cce415707a62fc", "status": "COMPLETE"}
+{"number": 2, "parts": 1, "slug": "Capacitor", "source": "https://github.com/ionic-team/capacitor.git", "source_commit": "0c9e35dec13a99ec4a582a2edc536cbec96bf27d", "status": "COMPLETE"}
+{"number": 3, "parts": 11, "slug": "PWABuilder", "source": "https://github.com/pwa-builder/PWABuilder.git", "source_commit": "518130020d54437a3bb468805ba0cd69c36446f5", "status": "COMPLETE"}
+{"number": 4, "parts": 1, "slug": "Workbox", "source": "https://github.com/GoogleChrome/workbox.git", "source_commit": "4ea3138a120fd2c87389b54130e25f47e0fd7089", "status": "COMPLETE"}
+{"number": 5, "parts": 1, "slug": "Neutralino", "source": "https://github.com/neutralinojs/neutralinojs.git", "source_commit": "bcecbefe35a18acb12ca4e18d47ee4a03f4c1c81", "status": "COMPLETE"}
+{"number": 7, "parts": 1, "slug": "Bubblewrap-TWA", "source": "https://github.com/GoogleChromeLabs/bubblewrap.git", "source_commit": "a5ffe214c3b03d2d19fbce6d40097a78aa043f66", "status": "COMPLETE"}
+{"number": 8, "parts": 1, "slug": "Dexie", "source": "https://github.com/dexie/Dexie.js.git", "source_commit": "32ad221a518a9b2375d2fed4137a4105d055c288", "status": "COMPLETE"}
+{"number": 9, "parts": 1, "slug": "localForage", "source": "https://github.com/localForage/localForage.git", "source_commit": "fb78c77ee583fb727a558c439b5174aca38c5924", "status": "COMPLETE"}
+{"number": 10, "parts": 1, "slug": "PouchDB", "source": "https://github.com/pouchdb/pouchdb.git", "source_commit": "27de91f1105a8074ddd06f5a23156dd99c4eb016", "status": "COMPLETE"}
+{"number": 11, "parts": 1, "slug": "browser-fs-access", "source": "https://github.com/GoogleChromeLabs/browser-fs-access.git", "source_commit": "686165d55fc159dae80ef95dc2a70472923aeccd", "status": "COMPLETE"}
+{"number": 12, "parts": 1, "slug": "Filesystem", "source": "https://github.com/ionic-team/capacitor-filesystem.git", "source_commit": "74495f5177e8f3f2aa477058708af69dea0c0a09", "status": "COMPLETE"}
+{"number": 13, "parts": 1, "slug": "capacitor-plugins", "source": "https://github.com/ionic-team/capacitor-plugins.git", "source_commit": "89070d432771b94c97294ed57b8d4843fc9f5392", "status": "COMPLETE"}
+{"number": 14, "parts": 1, "slug": "capacitor-file-sharer", "source": "https://github.com/Cap-go/capacitor-file-sharer.git", "source_commit": "9379ba451869475c70db972875ab6253616bb19b", "status": "COMPLETE"}
+{"number": 1, "parts": 8, "slug": "Wails", "source": "https://github.com/wailsapp/wails.git", "source_commit": "ceaf5e765bb35f64974de4ebc831ade186000f52", "status": "COMPLETE"}
