@@ -1,0 +1,52 @@
+{
+  "bundle_bytes": 30170983,
+  "bundle_sha256": "7b96c80b4a6cb1d8deec52995ff4590b79c3f6a99fdbb2a2b94be59662a0da5d",
+  "extracted_tree": {
+    "bytes": 52688015,
+    "files": 3303,
+    "sha256": "5c6983cfd2cd144740e43b525ea908cc86e842d10fc04e1284ee62745474aad5"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "strands-agents-sdk-python.bundle.zip.part-0001",
+      "sha256": "92a56b913194d0c0a7425b84aa7ca03166948f31f0c104991907b3e6a973e395"
+    },
+    {
+      "bytes": 12582912,
+      "name": "strands-agents-sdk-python.bundle.zip.part-0002",
+      "sha256": "6c864f3a3947bef78709ae84ef65949430aa2e1562a7056151e34abde4c6cd96"
+    },
+    {
+      "bytes": 5005159,
+      "name": "strands-agents-sdk-python.bundle.zip.part-0003",
+      "sha256": "ff9abfcb396615b4c50a4eb1bb607879a71ddde3124487c83b9b344077cc23c6"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "skipped_special": [
+    ".claude/references",
+    ".claude/skills",
+    ".kiro/references",
+    ".kiro/skills",
+    "site/src/content/docs/api/python/_generated",
+    "site/src/content/docs/api/typescript/_generated"
+  ],
+  "skipped_special_count": 6,
+  "slug": "strands-agents-sdk-python",
+  "source_bytes": 52688015,
+  "source_commit": "26700e62d0e98b0976c095fc173561fb591f98c3",
+  "source_files": 3303,
+  "source_ref": "HEAD",
+  "source_repo": "strands-agents/sdk-python",
+  "source_tree": {
+    "bytes": 52688015,
+    "files": 3303,
+    "sha256": "5c6983cfd2cd144740e43b525ea908cc86e842d10fc04e1284ee62745474aad5"
+  }
+}
