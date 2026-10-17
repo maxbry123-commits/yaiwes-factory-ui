@@ -1,0 +1,50 @@
+{
+  "bundle_bytes": 39919822,
+  "bundle_sha256": "d3bc67612a4275d6b09ec8ea4e26f0b80e051bd4541514e3a1d11e1665d97012",
+  "extracted_tree": {
+    "bytes": 111497313,
+    "files": 12744,
+    "sha256": "924b96962b3c195085450660db0e7d1ba569e551080517868fab896baefb0c86"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "haystack.bundle.zip.part-0001",
+      "sha256": "258cadf879c2df46eb31d860676e1fa6d3ebaed7f6d6778a39b28ba9b3ffa25a"
+    },
+    {
+      "bytes": 12582912,
+      "name": "haystack.bundle.zip.part-0002",
+      "sha256": "ccdcc5e253fde87a8940560cbd6bd6a004403dd85e247a10d3142dde578ac380"
+    },
+    {
+      "bytes": 12582912,
+      "name": "haystack.bundle.zip.part-0003",
+      "sha256": "3cc0b09534324c78d588e0929801445e58c8030864e0710eba7e173da893d72e"
+    },
+    {
+      "bytes": 2171086,
+      "name": "haystack.bundle.zip.part-0004",
+      "sha256": "ae39bdbeb8ee5748146120c3f6875741d5c5681a09925111cfa1e94112ab645b"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "skipped_special": [],
+  "skipped_special_count": 0,
+  "slug": "haystack",
+  "source_bytes": 111497313,
+  "source_commit": "122a617bd661de20cbf882f00010627b0ed7278f",
+  "source_files": 12744,
+  "source_ref": "main",
+  "source_repo": "deepset-ai/haystack",
+  "source_tree": {
+    "bytes": 111497313,
+    "files": 12744,
+    "sha256": "924b96962b3c195085450660db0e7d1ba569e551080517868fab896baefb0c86"
+  }
+}
