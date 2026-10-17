@@ -1,0 +1,68 @@
+{
+  "bundle_bytes": 81046973,
+  "bundle_sha256": "f0f6dfc746003d65a1443bf00f019f101ba3e38a501dcec3691f4d3dca4c4b1c",
+  "extracted_tree": {
+    "bytes": 220750041,
+    "files": 7691,
+    "sha256": "a455df90bc634fd99d5bb773624fb022fdba9560c0228b3cdc56430a75c88e0e"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "plasmic.bundle.zip.part-0001",
+      "sha256": "b3fdf9a01bb8183eed714301528f02e78b18ecc448e95b2ed560de3316498e60"
+    },
+    {
+      "bytes": 12582912,
+      "name": "plasmic.bundle.zip.part-0002",
+      "sha256": "23aac2cb9014206e142b103a052e72584d1b2e96a00b137d32749c7edc1224e7"
+    },
+    {
+      "bytes": 12582912,
+      "name": "plasmic.bundle.zip.part-0003",
+      "sha256": "23012b8c472e7b0d62231ef23b1bd9d4473e6a593a0ba2e2f6e2226eb0ac88e6"
+    },
+    {
+      "bytes": 12582912,
+      "name": "plasmic.bundle.zip.part-0004",
+      "sha256": "83fcca1001e58a67610a3320632191c397f5072d52ebc2a73e9c70ffabe67661"
+    },
+    {
+      "bytes": 12582912,
+      "name": "plasmic.bundle.zip.part-0005",
+      "sha256": "877691d62827fafeb842e09378f5736da0f611cf1535d46ef1d75c87f09b2e29"
+    },
+    {
+      "bytes": 12582912,
+      "name": "plasmic.bundle.zip.part-0006",
+      "sha256": "ab75c8f1ae8e1e67a83c0d36eafd67fbc28b0ac875428c75d20cb792b088ee0b"
+    },
+    {
+      "bytes": 5549501,
+      "name": "plasmic.bundle.zip.part-0007",
+      "sha256": "2d6153d983a61c05f1f7c66bac43246861e7952caf2e429f0761ed59fdd119e0"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "skipped_special": [
+    "AGENTS.md",
+    "platform/wab/AGENTS.md"
+  ],
+  "skipped_special_count": 2,
+  "slug": "plasmic",
+  "source_bytes": 220750041,
+  "source_commit": "9140855de959f5fc4658fd1d417b61f6c31b07a7",
+  "source_files": 7691,
+  "source_ref": "HEAD",
+  "source_repo": "plasmicapp/plasmic",
+  "source_tree": {
+    "bytes": 220750041,
+    "files": 7691,
+    "sha256": "a455df90bc634fd99d5bb773624fb022fdba9560c0228b3cdc56430a75c88e0e"
+  }
+}
