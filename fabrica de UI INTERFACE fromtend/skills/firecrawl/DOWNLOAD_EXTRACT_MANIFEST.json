@@ -1,0 +1,45 @@
+{
+  "bundle_bytes": 31342301,
+  "bundle_sha256": "3c58eaf8823a74f3e6a1354ddc5e0edbb0666babaa3632004c4bd40703dfb8f1",
+  "extracted_tree": {
+    "bytes": 54587337,
+    "files": 2086,
+    "sha256": "adeaa5f1d20a9f3901cbcd3aec9b53b0ca0a57552cc00599a1959ae99525904f"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "firecrawl.bundle.zip.part-0001",
+      "sha256": "d83e569910ca12ec08aa2b85dbd9ce5a36fba8c25ec268b9ef5d3fd900aceb12"
+    },
+    {
+      "bytes": 12582912,
+      "name": "firecrawl.bundle.zip.part-0002",
+      "sha256": "abaee55aa5a6b15ed5cf7132f88360eead62eb32eca532230c1c3a74fbd633b0"
+    },
+    {
+      "bytes": 6176477,
+      "name": "firecrawl.bundle.zip.part-0003",
+      "sha256": "7f5037cfe9b423a103f9a02f1539e51571cb5e7b525508db22083e33fa21c3b4"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "skipped_special": [],
+  "skipped_special_count": 0,
+  "slug": "firecrawl",
+  "source_bytes": 54587337,
+  "source_commit": "dcfed9dab6ed67aa479e97cafd126da82d5b8357",
+  "source_files": 2086,
+  "source_ref": "HEAD",
+  "source_repo": "firecrawl/firecrawl",
+  "source_tree": {
+    "bytes": 54587337,
+    "files": 2086,
+    "sha256": "adeaa5f1d20a9f3901cbcd3aec9b53b0ca0a57552cc00599a1959ae99525904f"
+  }
+}
