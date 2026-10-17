@@ -1,0 +1,39 @@
+{
+  "bundle_bytes": 10471886,
+  "bundle_sha256": "ffa7738f2dd022e7bd8d89267e26bf184b84a68c1fe4b1e2ff0bf8df8dcc06eb",
+  "extracted_tree": {
+    "bytes": 14157029,
+    "files": 518,
+    "sha256": "d594402e512eece0a9568c0a0febdf9ff79cdb269c7b05d61e2951782651915a"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 10471886,
+      "name": "caret-desktop.bundle.zip.part-0001",
+      "sha256": "ffa7738f2dd022e7bd8d89267e26bf184b84a68c1fe4b1e2ff0bf8df8dcc06eb"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "skipped_special": [
+    ".claude/commands/hotfix-release.md",
+    ".claude/commands/release.md",
+    ".worktreeinclude"
+  ],
+  "skipped_special_count": 3,
+  "slug": "caret-desktop",
+  "source_bytes": 14157029,
+  "source_commit": "b150c0dfe17ad6bc557aa7174ce3af11f240eeb5",
+  "source_files": 518,
+  "source_ref": "HEAD",
+  "source_repo": "precious112/caret-desktop",
+  "source_tree": {
+    "bytes": 14157029,
+    "files": 518,
+    "sha256": "d594402e512eece0a9568c0a0febdf9ff79cdb269c7b05d61e2951782651915a"
+  }
+}
