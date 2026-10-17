@@ -1,0 +1,27 @@
+{
+ "schema": "yaiwes.core.lfs-free-reacquire.v1",
+ "source_repo": "microsoft/agent-framework",
+ "source_commit": "547886482643a1337566a0e528fed1a4defce5ef",
+ "slug": "agent-framework",
+ "route": "clon superficial local sin smudge LFS -> quitar punteros LFS y reglas filter=lfs -> ZIP -> motor_1 (CRC+tree hash) -> motor_3 (sha256 por archivo)",
+ "source_tree": {
+  "files": 5529,
+  "sha256": "2b29ec9e0519ffc641f2ce9e84a62beecc9ca6f7418ce8e2ee74cffef0f71f57"
+ },
+ "extracted_tree": {
+  "files": 5529,
+  "sha256": "2b29ec9e0519ffc641f2ce9e84a62beecc9ca6f7418ce8e2ee74cffef0f71f57"
+ },
+ "motor_1_verdict": "VERIFIED_CLOSED",
+ "extraction_verified": true,
+ "removed_lfs_pointer_files": [
+  "python/packages/lab/lightning/assets/train_math_agent.png",
+  "python/packages/lab/lightning/assets/train_tau2_agent.png"
+ ],
+ "gitattributes_lfs_removed": [
+  "python/packages/lab/lightning/.gitattributes (archivo eliminado: solo tenía reglas LFS)"
+ ],
+ "excluded_non_lfs": {},
+ "skipped_symlinks": [],
+ "no_lfs": true
+}

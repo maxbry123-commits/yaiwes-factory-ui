@@ -1,0 +1,38 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+
+using Microsoft.Shared.Diagnostics;
+
+namespace Microsoft.Agents.AI;
+
+/// <summary>
+/// Provides extension methods for adding tool approval middleware to <see cref="AIAgentBuilder"/> instances.
+/// </summary>
+public static class ToolApprovalAgentBuilderExtensions
+{
+    /// <summary>
+    /// Adds tool approval middleware to the agent pipeline, enabling "don't ask again" approval behavior.
+    /// </summary>
+    /// <param name="builder">The <see cref="AIAgentBuilder"/> to which tool approval support will be added.</param>
+    /// <param name="options">
+    /// Optional <see cref="ToolApprovalAgentOptions"/> for configuring serialization and auto-approval rules.
+    /// When <see langword="null"/>, default settings are used.
+    /// </param>
+    /// <returns>The <see cref="AIAgentBuilder"/> with tool approval middleware added, enabling method chaining.</returns>
+    /// <exception cref="System.ArgumentNullException"><paramref name="builder"/> is <see langword="null"/>.</exception>
+    /// <remarks>
+    /// <para>
+    /// The <see cref="ToolApprovalAgent"/> middleware intercepts tool approval flows between the caller and the inner agent.
+    /// When a caller responds with an <see cref="AlwaysApproveToolApprovalResponseContent"/>, the middleware records a standing
+    /// approval rule so that future matching tool calls are auto-approved without user interaction.
+    /// </para>
+    /// <para>
+    /// <b>Security:</b> Standing rules persist in session state and are not tied to the agent or tool instance
+    /// that recorded them. Before reusing a session with a different agent or tool set, especially one that can
+    /// load tools from an outside source such as MCP, ensure its standing approvals are still appropriate.
+    /// </para>
+    /// </remarks>
+    public static AIAgentBuilder UseToolApproval(
+        this AIAgentBuilder builder,
+        ToolApprovalAgentOptions? options = null)
+        => Throw.IfNull(builder).Use(innerAgent => new ToolApprovalAgent(innerAgent, options));
+}
