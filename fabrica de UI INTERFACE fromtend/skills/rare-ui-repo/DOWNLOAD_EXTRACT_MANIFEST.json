@@ -1,0 +1,35 @@
+{
+  "bundle_bytes": 9250116,
+  "bundle_sha256": "b9e7691046809f042ca3379b6dc7d3a93d28a448e290ae842cfd963dd7d41c45",
+  "extracted_tree": {
+    "bytes": 10893414,
+    "files": 268,
+    "sha256": "c9f474d47348c31856f950735ada7966c7b6f72ed12010d7b9eabd2f91fbe5ae"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 9250116,
+      "name": "rare-ui-repo.bundle.zip.part-0001",
+      "sha256": "b9e7691046809f042ca3379b6dc7d3a93d28a448e290ae842cfd963dd7d41c45"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "skipped_special": [],
+  "skipped_special_count": 0,
+  "slug": "rare-ui-repo",
+  "source_bytes": 10893414,
+  "source_commit": "9633fcfa81c212a0ba48507e9c56be4869d61928",
+  "source_files": 268,
+  "source_ref": "HEAD",
+  "source_repo": "swamimalode07/rare-ui",
+  "source_tree": {
+    "bytes": 10893414,
+    "files": 268,
+    "sha256": "c9f474d47348c31856f950735ada7966c7b6f72ed12010d7b9eabd2f91fbe5ae"
+  }
+}
