@@ -1,0 +1,50 @@
+{
+  "bundle_bytes": 42681087,
+  "bundle_sha256": "73b0dd4d916baee889331647679f5553a5017ec95774167ef7fca8871bc9796c",
+  "extracted_tree": {
+    "bytes": 69800060,
+    "files": 3128,
+    "sha256": "02f8a03d05fbb08ce27f2e574ca37b0ddb615582794b71bac74023b27e0164d0"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "playwright.bundle.zip.part-0001",
+      "sha256": "94c228e19ef69df1488445dd18adb6543023e5aa754d127c0cc1339991cb38ed"
+    },
+    {
+      "bytes": 12582912,
+      "name": "playwright.bundle.zip.part-0002",
+      "sha256": "cb9db369ae3cb44d423c91c1e924f5f5d3d604f4a79cd6c9fe5bd3946a8366e9"
+    },
+    {
+      "bytes": 12582912,
+      "name": "playwright.bundle.zip.part-0003",
+      "sha256": "4862481ae3737a4d351d36b92b8afc3aca1ca4332d26301969ff6a2ad7148f99"
+    },
+    {
+      "bytes": 4932351,
+      "name": "playwright.bundle.zip.part-0004",
+      "sha256": "bd312ea82ade72928092f4f627f80b82417b447f208091cb024ebc830fef0b5a"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "skipped_special": [],
+  "skipped_special_count": 0,
+  "slug": "playwright",
+  "source_bytes": 69800060,
+  "source_commit": "b335271cdc2b57cac2be8ad37c5dd283ac6b8938",
+  "source_files": 3128,
+  "source_ref": "HEAD",
+  "source_repo": "microsoft/playwright",
+  "source_tree": {
+    "bytes": 69800060,
+    "files": 3128,
+    "sha256": "02f8a03d05fbb08ce27f2e574ca37b0ddb615582794b71bac74023b27e0164d0"
+  }
+}
