@@ -1,0 +1,35 @@
+{
+  "bundle_bytes": 3163640,
+  "bundle_sha256": "d98543d5986d717caeefe2cb311d35bd351db52a5a32ac22a57eecb305562233",
+  "extracted_tree": {
+    "bytes": 4072652,
+    "files": 94,
+    "sha256": "386b71afb2593d447931ea0cb19fd1e465835755daf8207ea7fba9c5a3fbbc65"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 3163640,
+      "name": "firecrawl-mcp-server.bundle.zip.part-0001",
+      "sha256": "d98543d5986d717caeefe2cb311d35bd351db52a5a32ac22a57eecb305562233"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "skipped_special": [],
+  "skipped_special_count": 0,
+  "slug": "firecrawl-mcp-server",
+  "source_bytes": 4072652,
+  "source_commit": "26a23f28ec22241cb16e2115f27a6370ce2a00e0",
+  "source_files": 94,
+  "source_ref": "HEAD",
+  "source_repo": "firecrawl/firecrawl-mcp-server",
+  "source_tree": {
+    "bytes": 4072652,
+    "files": 94,
+    "sha256": "386b71afb2593d447931ea0cb19fd1e465835755daf8207ea7fba9c5a3fbbc65"
+  }
+}
