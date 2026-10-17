@@ -1,0 +1,98 @@
+{
+  "bundle_bytes": 143965330,
+  "bundle_sha256": "350ccd42f3f025ddd64e266852e90f04c229214f9e5417f504718c7f21d34c60",
+  "extracted_tree": {
+    "bytes": 173385800,
+    "files": 2508,
+    "sha256": "0ef69142e7efcb52285e3664973389fdbadc0b054e16cc76b9ec8d119156e232"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "claude-mem.bundle.zip.part-0001",
+      "sha256": "3bd620005a8daf5a9883317f01bab4ffe131944bd55339e735691bdeccc4df04"
+    },
+    {
+      "bytes": 12582912,
+      "name": "claude-mem.bundle.zip.part-0002",
+      "sha256": "05fef5fac4aad651d7570cc37c674ea0d74477f2234b0828ea012e72d47db16d"
+    },
+    {
+      "bytes": 12582912,
+      "name": "claude-mem.bundle.zip.part-0003",
+      "sha256": "69a2b59c089a5c7e77f3c4962b4466e84696426fac48d7bbfc480e979b665d8e"
+    },
+    {
+      "bytes": 12582912,
+      "name": "claude-mem.bundle.zip.part-0004",
+      "sha256": "f80c9cb8dc4b7210288b9130349f74e4619d464f1356f3ff5322b07a5d66671e"
+    },
+    {
+      "bytes": 12582912,
+      "name": "claude-mem.bundle.zip.part-0005",
+      "sha256": "a24da1c20ed0eaf7491b32898a654219787afe17a12a32ec3cacf6f3fb83a48a"
+    },
+    {
+      "bytes": 12582912,
+      "name": "claude-mem.bundle.zip.part-0006",
+      "sha256": "585fe07a96e796f8ab19fdeeb15d114da46a04b7a156b241659604df76ebc930"
+    },
+    {
+      "bytes": 12582912,
+      "name": "claude-mem.bundle.zip.part-0007",
+      "sha256": "e843b1635434c007b1eef7473a27063473e9210c234aa1dac4b216ad3d60c14a"
+    },
+    {
+      "bytes": 12582912,
+      "name": "claude-mem.bundle.zip.part-0008",
+      "sha256": "0d08885352d61cc4fbb15bbf777a0fb401f235c525834a911194671a023410ec"
+    },
+    {
+      "bytes": 12582912,
+      "name": "claude-mem.bundle.zip.part-0009",
+      "sha256": "564e41e7a25ccccd974c4ee02fbb9dfec6a26122f7b2773ce1f62cd65d17afa0"
+    },
+    {
+      "bytes": 12582912,
+      "name": "claude-mem.bundle.zip.part-0010",
+      "sha256": "15401c80580d86a65a3f1d07648438f08d5f78ea8b4571daf84a7cf68904a2c4"
+    },
+    {
+      "bytes": 12582912,
+      "name": "claude-mem.bundle.zip.part-0011",
+      "sha256": "578430010643923f0fa93d501e8c7146e50e190544e5ee273dc1276a2b1ce1b7"
+    },
+    {
+      "bytes": 5553298,
+      "name": "claude-mem.bundle.zip.part-0012",
+      "sha256": "797ca2020608cd445320642e98651543ade8a15119f918e5b199c4859aee00d5"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "skipped_special": [
+    "evals/read-gate/gate-off-large-file/scaffold-large-gate-off.sh",
+    "evals/read-gate/gate-off-small-file/scaffold-gate-off.sh",
+    "evals/read-gate/gate-on-edits-file/scaffold-large-gate-on.sh",
+    "evals/read-gate/gate-on-large-file/scaffold-large-gate-on.sh",
+    "evals/read-gate/gate-on-small-file/scaffold-gate-on.sh",
+    "openclaw/skills/do/SKILL.md",
+    "openclaw/skills/make-plan/SKILL.md"
+  ],
+  "skipped_special_count": 7,
+  "slug": "claude-mem",
+  "source_bytes": 173385800,
+  "source_commit": "b85cd123daf8e5bd59edb2d1c7b98e0bba28b3a0",
+  "source_files": 2508,
+  "source_ref": "HEAD",
+  "source_repo": "thedotmack/claude-mem",
+  "source_tree": {
+    "bytes": 173385800,
+    "files": 2508,
+    "sha256": "0ef69142e7efcb52285e3664973389fdbadc0b054e16cc76b9ec8d119156e232"
+  }
+}
