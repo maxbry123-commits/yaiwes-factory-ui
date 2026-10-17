@@ -1,0 +1,130 @@
+{
+  "bundle_bytes": 182676050,
+  "bundle_sha256": "7d0a1d4bc6fdd7a1a6c2625b1984799865fba63ba6c53297a7d111ce6b683067",
+  "extracted_tree": {
+    "bytes": 301229843,
+    "files": 4319,
+    "sha256": "dd646ae95cac1b40b19b9510022f44ebf1fc4962d6bf47afdead8764c4ab6182"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "pydantic-ai.bundle.zip.part-0001",
+      "sha256": "d9c42f52252b6de52535ded42d73e4ef7d00a9c4e4f7fa0391c109c1acd69d8c"
+    },
+    {
+      "bytes": 12582912,
+      "name": "pydantic-ai.bundle.zip.part-0002",
+      "sha256": "22671dd15ca13f8a8ac414db92d4e80802e9d150f5f9048756a000d5a469acc9"
+    },
+    {
+      "bytes": 12582912,
+      "name": "pydantic-ai.bundle.zip.part-0003",
+      "sha256": "b3a6196b615ff6cb6c54b75e0dad22bda6a5f69f901b49d3bf7220092946931b"
+    },
+    {
+      "bytes": 12582912,
+      "name": "pydantic-ai.bundle.zip.part-0004",
+      "sha256": "9a0a9a8a65b5d80ce0e151ab54db75120a1bab3711ef1c4bca4ec9eaed7172de"
+    },
+    {
+      "bytes": 12582912,
+      "name": "pydantic-ai.bundle.zip.part-0005",
+      "sha256": "53ed50e973975954a9d10e1234ee5f6b93a9695634edc51c43edad65232b5099"
+    },
+    {
+      "bytes": 12582912,
+      "name": "pydantic-ai.bundle.zip.part-0006",
+      "sha256": "31dcb581da8813db4b7c0ba284f8c86cb27aff5f8d27944190a832e5f671f194"
+    },
+    {
+      "bytes": 12582912,
+      "name": "pydantic-ai.bundle.zip.part-0007",
+      "sha256": "ab7054cf29ef901740e7f4ee4eb731582f82ca9b33664e1026d601d5a0d1a0de"
+    },
+    {
+      "bytes": 12582912,
+      "name": "pydantic-ai.bundle.zip.part-0008",
+      "sha256": "52e1848ad209d53d7ff86f0e60270d6f321a391cfda4c572373d88cbe153d539"
+    },
+    {
+      "bytes": 12582912,
+      "name": "pydantic-ai.bundle.zip.part-0009",
+      "sha256": "83fdb5c3691958b0dd237a1d2fa718642cfe969aa1925eba51ce6e183e5fd91d"
+    },
+    {
+      "bytes": 12582912,
+      "name": "pydantic-ai.bundle.zip.part-0010",
+      "sha256": "dcb25d37cd8a7018984fe240f3e28892ccea982f911aacf3c129d8d3bde1fc24"
+    },
+    {
+      "bytes": 12582912,
+      "name": "pydantic-ai.bundle.zip.part-0011",
+      "sha256": "41d939c71374eaaed8ef961aaf5c85331302f3ffdfc3f8e282ceb28bdafe3f4c"
+    },
+    {
+      "bytes": 12582912,
+      "name": "pydantic-ai.bundle.zip.part-0012",
+      "sha256": "d0f3bc50ec0248da5567ea9e7e1e74fddba446247d92b8cbe79835720562f8a2"
+    },
+    {
+      "bytes": 12582912,
+      "name": "pydantic-ai.bundle.zip.part-0013",
+      "sha256": "54d72926642f26ab3247e29621d30ebd8982b137dfb7566612c5490dd87b69a4"
+    },
+    {
+      "bytes": 12582912,
+      "name": "pydantic-ai.bundle.zip.part-0014",
+      "sha256": "e6a8d55484c2baafe43d820c46141345147b584705855c9040683611d033bcaf"
+    },
+    {
+      "bytes": 6515282,
+      "name": "pydantic-ai.bundle.zip.part-0015",
+      "sha256": "2f3b16c0fa6c28c809c9c6147f36f8c99d58c4f15f93e2e8953512bef90bb090"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "skipped_special": [
+    ".claude/skills/add-new-model",
+    ".claude/skills/adding-a-provider-api-feature",
+    ".claude/skills/complete-partial-pr",
+    ".claude/skills/docs-parity-reviewer",
+    ".claude/skills/i-have-adhd",
+    ".claude/skills/poweruser-feature-audit",
+    ".claude/skills/pushing-commits-to-the-repo",
+    ".github/workflows/CLAUDE.md",
+    "CLAUDE.md",
+    "CONTRIBUTING.md",
+    "docs/CLAUDE.md",
+    "docs/harness/CLAUDE.md",
+    "docs/model_aliases/CLAUDE.md",
+    "docs/realtime/CLAUDE.md",
+    "pydantic_ai_slim/pydantic_ai/CLAUDE.md",
+    "pydantic_ai_slim/pydantic_ai/models/CLAUDE.md",
+    "pydantic_ai_slim/pydantic_ai/native_tools/CLAUDE.md",
+    "pydantic_ai_slim/pydantic_ai/realtime/CLAUDE.md",
+    "pydantic_ai_slim/pydantic_ai/ui/CLAUDE.md",
+    "src/pydantic_ai_harness/CLAUDE.md",
+    "src/pydantic_clai2/CLAUDE.md",
+    "tests/CLAUDE.md",
+    "tests/benchmarks/CLAUDE.md",
+    "tests/harness/CLAUDE.md"
+  ],
+  "skipped_special_count": 24,
+  "slug": "pydantic-ai",
+  "source_bytes": 301229843,
+  "source_commit": "9ac853bb84ffed7ba0edccb026c5b4f3228c1de7",
+  "source_files": 4319,
+  "source_ref": "main",
+  "source_repo": "pydantic/pydantic-ai",
+  "source_tree": {
+    "bytes": 301229843,
+    "files": 4319,
+    "sha256": "dd646ae95cac1b40b19b9510022f44ebf1fc4962d6bf47afdead8764c4ab6182"
+  }
+}

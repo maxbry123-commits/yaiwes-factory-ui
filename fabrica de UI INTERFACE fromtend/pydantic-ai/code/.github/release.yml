@@ -1,0 +1,19 @@
+changelog:
+  exclude:
+    labels:
+      - docs
+      - chore
+      - pkg:clai2
+  categories:
+    - title: ⚠️ Compatibility Notes
+      labels:
+        - compatibility impact
+    - title: 🚀 Features
+      labels:
+        - feature
+    - title: 🐛 Bug Fixes
+      labels:
+        - bug
+    - title: 📦 Dependencies
+      labels:
+        - dependency
