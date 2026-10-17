@@ -1,0 +1,105 @@
+{
+  "bundle_bytes": 182564163,
+  "bundle_sha256": "6f9d58a55221dd7057228bffcd36b69a577c5e0fa17010b2056f0f885d124207",
+  "extracted_tree": {
+    "bytes": 296969776,
+    "files": 13213,
+    "sha256": "85affd06cfc9586b1eb5f9e18e86a026327fc1bec7344c2deda88e4669a721f5"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "open-design.bundle.zip.part-0001",
+      "sha256": "b01c701334a5e587dfc1d747d14310354f8706ecdfd17a503cff2cbaf5baed57"
+    },
+    {
+      "bytes": 12582912,
+      "name": "open-design.bundle.zip.part-0002",
+      "sha256": "8e765b708bb107c508dfec8894a9d3383246a38fa4fab1f17222103c25453280"
+    },
+    {
+      "bytes": 12582912,
+      "name": "open-design.bundle.zip.part-0003",
+      "sha256": "30631a7328b541782fc990d3890f0a0ca0f03fce8811be2f3b665fc9f167e2a3"
+    },
+    {
+      "bytes": 12582912,
+      "name": "open-design.bundle.zip.part-0004",
+      "sha256": "6922a68cd15deb662b9e522d755f4c048435e298c6c82c656b77ddaf8b7f175b"
+    },
+    {
+      "bytes": 12582912,
+      "name": "open-design.bundle.zip.part-0005",
+      "sha256": "24cbcbfc2c109ad6954f6677bb4b826d4969ca9e3fd365e2b525955898d55bf6"
+    },
+    {
+      "bytes": 12582912,
+      "name": "open-design.bundle.zip.part-0006",
+      "sha256": "26bb58935ba7c610c09bc0895bf6c5810cf6def1f33e450651e90b5c877fe427"
+    },
+    {
+      "bytes": 12582912,
+      "name": "open-design.bundle.zip.part-0007",
+      "sha256": "5e8dced3ecf62153f5597f9cf1fd505792ea0f2f5a2a339b495b703c48112d48"
+    },
+    {
+      "bytes": 12582912,
+      "name": "open-design.bundle.zip.part-0008",
+      "sha256": "ebdb2c14c822d83f36e18e410b21be9273fe2f223c8e9e08509f1a9ee11af099"
+    },
+    {
+      "bytes": 12582912,
+      "name": "open-design.bundle.zip.part-0009",
+      "sha256": "2cce417b36aeae035e7f269ee3a20be9c4714a08b1d6952a247bf7c418d31fc8"
+    },
+    {
+      "bytes": 12582912,
+      "name": "open-design.bundle.zip.part-0010",
+      "sha256": "cb26c7e368d1f21232f87e8498ad62e8249e4c5b2fa0618436701782c8e53a54"
+    },
+    {
+      "bytes": 12582912,
+      "name": "open-design.bundle.zip.part-0011",
+      "sha256": "dcf5a1e9998b21a2abcae2410ffed2b2b5c897b4a47be7d36d55eb5faaa0129f"
+    },
+    {
+      "bytes": 12582912,
+      "name": "open-design.bundle.zip.part-0012",
+      "sha256": "c95a3e8d54e9b42915b7ab65762db57a0f1a7d9252f73063057380befe20ee6e"
+    },
+    {
+      "bytes": 12582912,
+      "name": "open-design.bundle.zip.part-0013",
+      "sha256": "2a1c64e938760d0745369987d04d1f4df93b3131d14cde9890ea51e77a6da6af"
+    },
+    {
+      "bytes": 12582912,
+      "name": "open-design.bundle.zip.part-0014",
+      "sha256": "f87e3a906a962b8a2b9d1040c7ca2a3ab1b56475f81adcc141e733d294125927"
+    },
+    {
+      "bytes": 6403395,
+      "name": "open-design.bundle.zip.part-0015",
+      "sha256": "d02c4693edb5301d9e06371330b29da5ec01c36225fe3f73adbaf5eaf0b5d1bb"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "skipped_special": [],
+  "skipped_special_count": 0,
+  "slug": "open-design",
+  "source_bytes": 296969776,
+  "source_commit": "78d5637cb49da07e81314d1544b5fc6d37c95084",
+  "source_files": 13213,
+  "source_ref": "HEAD",
+  "source_repo": "nexu-io/open-design",
+  "source_tree": {
+    "bytes": 296969776,
+    "files": 13213,
+    "sha256": "85affd06cfc9586b1eb5f9e18e86a026327fc1bec7344c2deda88e4669a721f5"
+  }
+}
