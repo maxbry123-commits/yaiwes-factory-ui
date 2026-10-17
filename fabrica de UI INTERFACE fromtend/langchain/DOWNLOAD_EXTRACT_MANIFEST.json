@@ -1,0 +1,40 @@
+{
+  "bundle_bytes": 21707848,
+  "bundle_sha256": "035fef5a087018ccd1881d96553db971e4f459636d4aabae2b08ac13a394aa4c",
+  "extracted_tree": {
+    "bytes": 44246173,
+    "files": 3190,
+    "sha256": "2a55e0431711efde8df4e8ef92a9eba1e9dc714466f3b5fd86ba08c0f1638f95"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "langchain.bundle.zip.part-0001",
+      "sha256": "6397bdac23fe450861ec44f03e6249ef78887d45f65fe78f096e8edde8a778da"
+    },
+    {
+      "bytes": 9124936,
+      "name": "langchain.bundle.zip.part-0002",
+      "sha256": "f85dbcb953398b957deba58788c81e4956f1e173f10249e3e3421ef0f0cf4bb5"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "skipped_special": [],
+  "skipped_special_count": 0,
+  "slug": "langchain",
+  "source_bytes": 44246173,
+  "source_commit": "84ba23c414eca6bf6f6ebd1394a3006378113540",
+  "source_files": 3190,
+  "source_ref": "master",
+  "source_repo": "langchain-ai/langchain",
+  "source_tree": {
+    "bytes": 44246173,
+    "files": 3190,
+    "sha256": "2a55e0431711efde8df4e8ef92a9eba1e9dc714466f3b5fd86ba08c0f1638f95"
+  }
+}
