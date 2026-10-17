@@ -1,0 +1,35 @@
+{
+  "bundle_bytes": 6433617,
+  "bundle_sha256": "936f5b929215e38999eac68e086d69b1a1be8f47a5ca86e18989ee1836cf630a",
+  "extracted_tree": {
+    "bytes": 12372685,
+    "files": 599,
+    "sha256": "02cd4e135c19123111d7bdf505d727974c309802c0f8f62965bcf05c386d59c5"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 6433617,
+      "name": "context-mode.bundle.zip.part-0001",
+      "sha256": "936f5b929215e38999eac68e086d69b1a1be8f47a5ca86e18989ee1836cf630a"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "skipped_special": [],
+  "skipped_special_count": 0,
+  "slug": "context-mode",
+  "source_bytes": 12372685,
+  "source_commit": "ced957d6af6449b3659113ee31c79e9ec6c6807c",
+  "source_files": 599,
+  "source_ref": "HEAD",
+  "source_repo": "mksglu/context-mode",
+  "source_tree": {
+    "bytes": 12372685,
+    "files": 599,
+    "sha256": "02cd4e135c19123111d7bdf505d727974c309802c0f8f62965bcf05c386d59c5"
+  }
+}
