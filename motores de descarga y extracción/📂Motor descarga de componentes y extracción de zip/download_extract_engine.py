@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import base64, hashlib, json, os, pathlib, shutil, stat, subprocess, tempfile, time, zipfile
+import hashlib, json, os, pathlib, shutil, stat, subprocess, tempfile, time, zipfile
 
-SCHEMA='yaiwes.hf.download-extract.v1'
+SCHEMA='yaiwes.download-extract.v2'
 LFS_POINTER=b'version https://git-lfs.github.com/spec/v1\n'
-PART_SIZE=int(os.getenv('PART_SIZE_MIB','12'))*1024*1024
-MAX_BLOB=int(os.getenv('MAX_GITHUB_BLOB_MIB','95'))*1024*1024
+PART_SIZE=max(1,min(95,int(os.getenv('PART_SIZE_MIB','12'))))*1024*1024
+MAX_BLOB=max(1,min(95,int(os.getenv('MAX_GITHUB_BLOB_MIB','95'))))*1024*1024
+MAX_EXTRACT_BYTES=int(os.getenv('MAX_EXTRACT_BYTES',str(8*1024**3)))
+FETCH_ATTEMPTS=max(1,min(6,int(os.getenv('FETCH_ATTEMPTS','3'))))
 SOURCE_REPO=os.getenv('SOURCE_REPO','').strip(); SOURCE_REF=os.getenv('SOURCE_REF','HEAD').strip() or 'HEAD'
-SLUG=os.getenv('SLUG','').strip(); DEST_REPO=os.getenv('DEST_REPO','maxbry123-commits/frontend').strip()
-DEST_BRANCH=os.getenv('DEST_BRANCH','main').strip() or 'main'; DEST_ROOT=os.getenv('DEST_ROOT','📂componentes open soure fromtend').strip().strip('/')
-TOKEN=os.getenv('GITHUB_TOKEN',''); PUBLISH=os.getenv('PUBLISH','0').lower() in {'1','true','yes'}
+SLUG=os.getenv('SLUG','').strip(); DEST_REPO=os.getenv('DEST_REPO','').strip()
+DEST_BRANCH=os.getenv('DEST_BRANCH','main').strip() or 'main'; DEST_ROOT=os.getenv('DEST_ROOT','').strip().strip('/')
+PUBLISH=os.getenv('PUBLISH','0').lower() in {'1','true','yes'}
 OK_VERDICTS={'DRY_RUN_DOWNLOAD_EXTRACT_VERIFIED','PUBLISHED_AND_EXTRACTED_READBACK_VERIFIED','ALREADY_PRESENT_VERIFIED'}
 
 def run(argv,cwd=None,env=None,check=True):
@@ -33,22 +35,34 @@ def no_lfs(d):
     run(['git','config','filter.lfs.clean','cat'],d); run(['git','config','filter.lfs.smudge','cat'],d)
     run(['git','config','--unset-all','filter.lfs.process'],d,check=False); run(['git','config','filter.lfs.required','false'],d)
 
-def auth_env():
-    e=dict(os.environ); raw=base64.b64encode(f'x-access-token:{TOKEN}'.encode()).decode()
-    e.update({'GIT_CONFIG_COUNT':'1','GIT_CONFIG_KEY_0':'http.https://github.com/.extraheader','GIT_CONFIG_VALUE_0':f'AUTHORIZATION: basic {raw}','GIT_TERMINAL_PROMPT':'0'})
+def git_env():
+    e=dict(os.environ); e['GIT_TERMINAL_PROMPT']='0'
     return e
 
+def is_rate_limited(text):
+    t=(text or '').lower()
+    return any(k in t for k in ('rate limit','secondary rate','too many requests','429','abuse detection'))
+
+def run_ok(argv,cwd=None,env=None):
+    p=subprocess.run(argv,cwd=cwd,env=env,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+    return p.returncode==0,p.stdout.strip()
+
 def acquire(work):
-    """2026-09-26: si la rama pedida no existe (p. ej. 'main' en un repo con 'master'), prueba HEAD, main y master antes de fallar."""
+    """Descarga con recuperacion: reintentos por ref con backoff, deteccion de rate-limit y corte de transferencias colgadas."""
     d=work/'source'; d.mkdir(); run(['git','init','-q'],d); run(['git','remote','add','origin',repo_url(SOURCE_REPO)+'.git'],d); no_lfs(d)
-    tried=[]
+    tried=[]; last=''
     for ref in dict.fromkeys([SOURCE_REF,'HEAD','main','master']):
         tried.append(ref)
-        out=run(['git','fetch','--depth=1','--filter=blob:none','origin',ref],d,check=False)
-        if 'fatal' not in out.lower() and 'error' not in out.lower()[:200]:
-            run(['git','checkout','-q','--detach','FETCH_HEAD'],d)
-            return d,run(['git','rev-parse','HEAD'],d),ref
-    raise RuntimeError('SOURCE_REF_GAP:'+','.join(tried))
+        for attempt in range(1,FETCH_ATTEMPTS+1):
+            ok,out=run_ok(['git','-c','http.lowSpeedLimit=1000','-c','http.lowSpeedTime=60','fetch','--depth=1','--filter=blob:none','origin',ref],d)
+            if ok:
+                run(['git','checkout','-q','--detach','FETCH_HEAD'],d)
+                return d,run(['git','rev-parse','HEAD'],d),ref
+            last=out
+            if is_rate_limited(last): time.sleep(min(120*attempt,600))
+            elif attempt<FETCH_ATTEMPTS: time.sleep(min(10*attempt,60))
+            else: break
+    raise RuntimeError(('SOURCE_RATE_LIMIT_GAP:' if is_rate_limited(last) else 'SOURCE_REF_GAP:')+','.join(tried))
 
 def strip_special(d):
     """2026-09-26 (autorizado por el Director): los enlaces simbólicos y archivos especiales del ORIGEN ya no bloquean la descarga.
@@ -126,16 +140,27 @@ def rebuild(parts_dir,parts,bundle_sha):
 
 def safe_extract(bundle,dst):
     dst.mkdir()
+    seen=set(); budget=MAX_EXTRACT_BYTES
     with zipfile.ZipFile(bundle) as z:
         for info in z.infolist():
             n=info.filename.replace('\\','/'); q=pathlib.PurePosixPath(n)
             if q.is_absolute() or '..' in q.parts: raise RuntimeError('UNSAFE_ZIP_PATH:'+n)
+            if n in seen: raise RuntimeError('ZIP_DUPLICATE_ENTRY:'+n)
+            seen.add(n)
             mode=(info.external_attr>>16)&0o170000
             if mode in {stat.S_IFLNK,stat.S_IFCHR,stat.S_IFBLK,stat.S_IFIFO,stat.S_IFSOCK}: raise RuntimeError('UNSAFE_ZIP_SPECIAL:'+n)
             out=dst/pathlib.Path(*q.parts)
             if info.is_dir(): out.mkdir(parents=True,exist_ok=True); continue
+            if info.file_size>budget: raise RuntimeError('ZIP_EXTRACT_BUDGET_GAP:'+n)
             out.parent.mkdir(parents=True,exist_ok=True)
-            with z.open(info) as r, out.open('wb') as w: shutil.copyfileobj(r,w,1024*1024)
+            with z.open(info) as r, out.open('wb') as w:
+                remaining=info.file_size
+                while remaining>0:
+                    b=r.read(min(1024*1024,remaining))
+                    if not b: raise RuntimeError('ZIP_TRUNCATED_ENTRY:'+n)
+                    w.write(b); remaining-=len(b)
+                if r.read(1): raise RuntimeError('ZIP_SIZE_LIE:'+n)
+            budget-=info.file_size
     scan_tree(dst,enforce_blob_limit=True)
 
 def sparse_checkout(d,repo,branch,pathspec,env):
@@ -144,9 +169,9 @@ def sparse_checkout(d,repo,branch,pathspec,env):
     run(['git','fetch','--depth=1','--filter=blob:none','origin',branch],d,env=env); run(['git','checkout','-q','-B',branch,'FETCH_HEAD'],d)
 
 def publish(work,parts_dir,extracted,manifest_path,slug):
-    if not TOKEN: return {'verdict':'WRITE_AUTH_GAP','detail':'GITHUB_TOKEN is not available'}
-    env=auth_env(); rel=(pathlib.Path(DEST_ROOT)/slug).as_posix(); dst=work/'destination'; sparse_checkout(dst,DEST_REPO,DEST_BRANCH,rel,env)
-    run(['git','config','user.name','yaiwes-hf-combined-engine'],dst); run(['git','config','user.email','yaiwes-hf-combined-engine@users.noreply.github.com'],dst)
+    if not DEST_REPO or not DEST_ROOT: return {'verdict':'DESTINATION_INPUT_GAP','detail':'DEST_REPO and DEST_ROOT are required when PUBLISH=1'}
+    env=git_env(); rel=(pathlib.Path(DEST_ROOT)/slug).as_posix(); dst=work/'destination'; sparse_checkout(dst,DEST_REPO,DEST_BRANCH,rel,env)
+    run(['git','config','user.name','yaiwes-download-extract-engine'],dst); run(['git','config','user.email','yaiwes-download-extract-engine@users.noreply.github.com'],dst)
     target=dst/rel
     if target.exists():
         # 2026-09-26: ya descargado antes = éxito (no se vuelve a subir ni se pisa). Se deja constancia si tiene manifiesto.
@@ -156,11 +181,18 @@ def publish(work,parts_dir,extracted,manifest_path,slug):
         if p.is_file() and not p.name.startswith('_') and p.name!='DOWNLOAD_EXTRACT_MANIFEST.json': shutil.copy2(p,archives/p.name)
     shutil.copy2(manifest_path,target/'DOWNLOAD_EXTRACT_MANIFEST.json')
     scan_tree(target,enforce_blob_limit=True)
-    run(['git','add','--sparse','--',rel],dst); run(['git','commit','-m',f'build(hf-combined): publish {slug} bundle and extracted tree'],dst)
+    run(['git','add','--sparse','--',rel],dst); run(['git','commit','-m',f'build(download-extract): publish {slug} bundle and extracted tree'],dst)
     run(['git','fetch','origin',DEST_BRANCH],dst,env=env); reb=run(['git','rebase',f'origin/{DEST_BRANCH}'],dst,env=env,check=False)
     if 'CONFLICT' in reb:
         run(['git','rebase','--abort'],dst,check=False); raise RuntimeError('NON_FAST_FORWARD_CONFLICT')
-    run(['git','push','origin',f'HEAD:{DEST_BRANCH}'],dst,env=env); commit=run(['git','rev-parse','HEAD'],dst)
+    push_ok=False
+    for attempt in range(1,4):
+        ok,out=run_ok(['git','push','origin',f'HEAD:{DEST_BRANCH}'],dst,env=env)
+        if ok: push_ok=True; break
+        if is_rate_limited(out): time.sleep(min(120*attempt,600))
+        else: raise RuntimeError('COMMAND_FAILED:git push:'+out[-2000:])
+    if not push_ok: raise RuntimeError('PUBLISH_RATE_LIMIT_GAP')
+    commit=run(['git','rev-parse','HEAD'],dst)
     rb=work/'readback'; sparse_checkout(rb,DEST_REPO,DEST_BRANCH,rel,env); rt=rb/rel; remote=json.loads((rt/'DOWNLOAD_EXTRACT_MANIFEST.json').read_text())
     for row in remote['parts']:
         p=rt/'_archives'/row['name']
@@ -173,7 +205,7 @@ def main():
     t=time.time()
     if not SOURCE_REPO: raise SystemExit(json.dumps({'schema':SCHEMA,'verdict':'INPUT_GAP','detail':'SOURCE_REPO required'}))
     slug=SLUG or slug_default(SOURCE_REPO)
-    with tempfile.TemporaryDirectory(prefix='yaiwes-hf-combined-') as td:
+    with tempfile.TemporaryDirectory(prefix='yaiwes-download-extract-') as td:
         work=pathlib.Path(td); src,commit,ref_used=acquire(work); skipped=strip_special(src); rows,src_bytes=scan_tree(src); src_tree=tree_hash(src)
         bundle=work/f'{slug}.bundle.zip'; make_zip(rows,bundle); bsha=sha256(bundle); parts_dir=work/'parts'; parts=split_bundle(bundle,parts_dir,slug)
         rebuilt=rebuild(parts_dir,parts,bsha); extracted=work/'extracted'; safe_extract(rebuilt,extracted); ext_tree=tree_hash(extracted)
